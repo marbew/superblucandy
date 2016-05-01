@@ -1,6 +1,0 @@
-#!/bin/bash
-# marbew - maincheck
-
-echo "MAINCHECK";
-
-exit 0
