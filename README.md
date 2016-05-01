@@ -1,2 +1,2 @@
 # superblucandy
-linuxing
+linuxing every day
