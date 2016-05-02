@@ -1,0 +1,4 @@
+#!/bin/bash
+# MarBEW
+echo "MAINCHECK"
+exit 0
