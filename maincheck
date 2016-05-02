@@ -1,4 +1,4 @@
 #!/bin/bash
 # MarBEW 2-may-2016 # 
-echo "MAINCHECK"
+echo -ne "MAINCHECK\n"
 exit 0
