@@ -1,4 +1,12 @@
 #!/bin/bash
 # MarBEW 2-may-2016 # 
-echo -ne "MAINCHECK\n"
-exit 0
+echo -e "\n\n\n\n\n\n"; netstat -plnt | grep -v tcp6; echo -e "\n"; \
+egrep -i '(warning|error|fatal|panic|SIGTERM|shutting|MAX|oom-killer|Out of memory|fail|denied|segfault|segmentation|rejected|oops)' /var/log/messages; \
+echo -e "\n"; last | head -n 20; echo -e "\n"; \
+echo -e "RACKERS:"; grep racker /var/log/secure; \
+echo -e "\n";  df -hP ; echo -e "\n"; \
+if [ -d /usr/local/psa/version ]; then echo -e "\nPLESK Panel\n"; fi; \
+if [ -d $(which sar) ]; then echo -e "\n CHECK SAR \n"; fi; \
+grep -m 3 PermitRootLogin /etc/ssh/sshd_config; \
+cat /etc/redhat-release; echo -e "\n"; \
+date; w; echo -e "\n";  
