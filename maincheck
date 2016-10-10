@@ -12,8 +12,7 @@ echo -e "\n\n[ ${RED}Report  queue length and load averages - sar -q -s `date -d
 sar -q -s `date -d '-4 hour' +%T`; fi; if [ -f /var/log/syslog ]; then var_logfile="/var/log/syslog"; 
 else var_logfile="/var/log/messages"; fi ; 
 echo -e "\n[ ${RED}REPORT ERRORS/WARNINGS ${NORED} ]"; 
-egrep -i --color=always '(warning|error|fatal|panic|SIGTERM|shutting|MAX|oom-killer|Out of memory|fail|denied|segfault|segmentation|rejected|oops)' 
-$var_logfile | tail -n 10 ; 
+egrep -i --color=always '(warning|error|fatal|panic|SIGTERM|shutting|MAX|oom-killer|Out of memory|fail|denied|segfault|segmentation|rejected|oops)' $var_logfile | tail -n 10 ; 
 echo -e "\n[ ${RED}FIREWALL RULES ${NORED} ]"; 
 firewall-cmd --list-all 2> /dev/null || iptables -L -n 2> /dev/null ; 
 echo -e "\n[ ${RED}LAST SUCCESSFUL LOGIN ${NORED} ]"; 
