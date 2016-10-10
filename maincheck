@@ -1,12 +1,29 @@
 #!/bin/bash
 # MarBEW 2-may-2016 # 
-echo -e "\n\n\n\n\n\n"; netstat -plnt | grep -v tcp6; echo -e "\n"; \
-egrep -i '(warning|error|fatal|panic|SIGTERM|shutting|MAX|oom-killer|Out of memory|fail|denied|segfault|segmentation|rejected|oops)' /var/log/messages; \
-echo -e "\n"; last | head -n 20; echo -e "\n"; \
-echo -e "RACKERS:"; grep racker /var/log/secure; \
-echo -e "\n";  df -hP ; echo -e "\n"; \
-if [ -d /usr/local/psa/version ]; then echo -e "\nPLESK Panel\n"; fi; \
-if [ -d $(which sar) ]; then echo -e "\n CHECK SAR \n"; fi; \
-grep -m 3 PermitRootLogin /etc/ssh/sshd_config; \
-cat /etc/redhat-release; echo -e "\n"; \
-date; w; echo -e "\n";  
+echo -e "\n\n\n\n\n\n\n\n\n\n\n" ; 
+RED='\033[0;31m'; NORED='\033[0m'; 
+echo -e "\n[ ${RED}REPORT FROM /VAR/LOG/YUM.LOG${NORED} ]"; 
+tail /var/log/yum.log 2> /dev/null || tail /var/log/dpkg.log 2> /dev/null  && 
+echo -e "\n\n[ ${RED}NETSTAT -plnut ${NORED}]"; 
+netstat -plunt | grep -v tcp6; if [ -d $(which sar) ]; then var_sar=1; fi;  if [ var_sar==1 ]; then 
+echo -e "\n\n[ ${RED}REPORT MEMORY UTILIZATION - sar -r -s `date -d '-4 hour' +%T`${NORED} ]"; 
+sar -r -s `date -d '-4 hour' +%T`; 
+echo -e "\n\n[ ${RED}Report  queue length and load averages - sar -q -s `date -d '-4 hour' +%T`${NORED} ]";
+sar -q -s `date -d '-4 hour' +%T`; fi; if [ -f /var/log/syslog ]; then var_logfile="/var/log/syslog"; 
+else var_logfile="/var/log/messages"; fi ; 
+echo -e "\n[ ${RED}REPORT ERRORS/WARNINGS ${NORED} ]"; 
+egrep -i --color=always '(warning|error|fatal|panic|SIGTERM|shutting|MAX|oom-killer|Out of memory|fail|denied|segfault|segmentation|rejected|oops)' 
+$var_logfile | tail -n 10 ; echo -e "\n[ ${RED}FIREWALL RULES ${NORED} ]"; 
+firewall-cmd --list-all 2> /dev/null || iptables -L -n 2> /dev/null ; 
+echo -e "\n[ ${RED}LAST SUCCESSFUL LOGIN ${NORED} ]"; 
+last | head -n 15; echo -e "\n[ ${RED}REPORT FROM SECURE FILE ${NORED} ]"; 
+cat -v /var/log/auth.log 2> /dev/null | grep "$(date|awk '{print $3"  "$2}')"| 
+grep -E '(BREAK-IN|Invalid user|Failed|refused|su |Illegal)' || 
+cat /var/log/secure 2> /dev/null | grep "$(date|awk '{print $3"  "$2}')" | 
+grep -E '(BREAK-IN|Invalid user|Failed|refused|su |Illegal)';  
+echo -e "\n[ ${RED}REPORT SSH CONFIG ${NORED} ]"; 
+grep -m 3 PermitRootLogin /etc/ssh/sshd_config; echo -e "\n[ ${RED}REPORT DISKS USAGE ${NORED} ]";  
+df -hP ;  if [ -d /usr/local/psa/version ]; then echo -e "\n\nPLESK Panel\n"; fi;  
+echo -e "\n[ ${RED}REPORT DISKS USAGE ${NORED} ]"; 
+cat /etc/redhat-release 2> /dev/null || cat /etc/issue 2> /dev/null;  
+echo -e "\n[ ${RED}REPORT UPTIME AND USERS ${NORED} ]"; date; w; echo -e "\n";
