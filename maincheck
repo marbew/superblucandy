@@ -1,5 +1,7 @@
 #!/bin/bash
 # MarBEW 2-may-2016 # 
+# THIS SCRIPT WILL REPORT THE STATUS OF THE SERVER AND IT WILL PROMPT FOR AN HEALTH CHECK
+
 echo -e "\n\n\n\n\n\n\n\n\n\n\n" ; 
 RED='\033[0;31m'; NORED='\033[0m'; 
 echo -e "\n[ ${RED}REPORT FROM /VAR/LOG/YUM.LOG${NORED} ]"; 
