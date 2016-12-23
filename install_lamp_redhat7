@@ -71,7 +71,8 @@ DROP DATABASE IF EXISTS test;
 DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
 FLUSH PRIVILEGES;
 EOF
-mysql --user="root" --password="$mysql_rootpwd" < /tmp/mysql_secure_installation.sql
 mysql --user="root" --password="$mysql_rootpwd" < /root/ec2-prod.marbew.com/mysql/29-11-2016_alldb_db_dump.sql
 mysql --user="root" --password="$mysql_rootpwd" < /root/ec2-prod.marbew.com/mysql/12-12-2016_wordpress_db_dump.sql
+mysql --user="root" --password="$mysql_rootpwd" < /root/mysql_secure_installation.sql
+
 
