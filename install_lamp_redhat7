@@ -1,0 +1,77 @@
+#!/bin/bash
+echo -e "Type IP origin server, followed by [ENTER]:"
+
+read server
+
+echo -e "Type Mysql password server, followed by [ENTER]:"
+
+read mysql_rootpwd
+
+yum update -y && \
+yum install -y vim firewalld httpd mariadb-server mariadb php php-mysql mod_ssl mod_security wget sysstat mailx && \
+systemctl enable httpd mariadb && \
+systemctl restart firewalld httpd mariadb && \
+systemctl status firewalld httpd mariadb && \
+firewall-cmd --permanent --add-service=http && \
+firewall-cmd --permanent --add-service=https && \
+firewall-cmd --reload && \
+cat <<EOF >> ~/.ssh/italia
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpQIBAAKCAQEAxa3VfZf75Yf4CippMhOQvvpqHcNY0rU0DkIg/4c0l09wV4Yl
+/qikxJ7BuJOY3RVG5SXJBPev6VBykjrizTYMamyPduz5t/qrbNVR7jrwcqhTDC6p
+ckP1wUDvv1eYK5aQWXP+dN6JrgpqOMV79dEgpn9eU5eu/1HfvwQpBNJ+MfmqMNP4
+l+KpJFMvUDtqv6Xzdaf/xR+9X9Rdum+ghQM4e0AM/ogkjt4Z7hSpOgZs5ccHL04O
+u3uuh9gZY3ZcR2uayVoqecomeNtmwuR6QewdxWedxH6E/etBExnZF8ZI0g383vIN
+anXC/vBIYEflmvk/u2U7FmGoTY9CJQWfB+bgYQIDAQABAoIBAA/tEWYs+H5llfY7
+tH30VZUNV79OHbncH3WGnmH34qTOIZ7rj+QUcjHlGHZmbcpiDHQptyhPTDzf3lsp
+o1wlHpr0ZBqQvQ21hFogVZl75iNWrFou6DfsgcAwGyCvTfM1DiwmzDleNHlxHV21
+i2cikh7X5CGX9uFbF0usaiGZU9Fyx6PLV+CTQ0/xNiodTp9he0L5+96Br5lD5I0Y
+UvRe1WLw6ELaLFF0DES2kN385ZBiyhAks0fPSyaqTQeu35gz1UkMWi7XUtI2ePRv
+a45NOI0QdGQZTzKwn9+bEWQ01ZXO3IoPV1Uii1hrw0SMvWg0wUV1a6XVrXTKyA55
+QOXejIECgYEA4hbD1RV1KPg2VwX+Ai/xIwOx4Ehm8Vkq1LO1NfuvtwqZ3VtJaOha
+YvDWGhIHij3kKryKu/k2+ci/HbPVy0uym4vvdXJ8s4MVMO4l1YAxiD5+hqJGSWPu
+ul2hBNdQLnD3tl4MD8rwtIFxSwHFEiT0Q/G9pbJ5t48++hrbZupdoUsCgYEA39Tg
+QGkQOKWv8VdCakYBGSZ1ZziS4HDFkYMAO2Af1SLErFo0sDnkBOp9IACKWXp8uvLS
+rCPjl8EpGEr6M4yfhNJIasnx1D4+r98zAfVHcJFVoDjUAA/pAgsM81E55Rya0O56
+3mA0WsIxn3zD5RBKV5uPez6a+xithm1l+6YYpYMCgYEAlw820UyA91rAk+yBBt0Z
+dJenZX96qI83Ot7HmMYNZXND0s6HgfydR7Y6lzisqQUpShSnbWjZ/pLOfv4FPsvZ
+Dmy1FffksdxHcGXuCXSZo7p9t179L1QB0at1RlLGVAFOwR6dWH/zy+cg10jbb4AZ
+ZLxERk21XZvsLBd9uImm/XkCgYEAsVXEEePrgSXsPoaGzRIHfriUnaIZ5A4UyZOD
+lIc00TVJos+ZHOHQwQBTAA7NjdTYi3kk5lNM1wenmmKU1lCcdavwygKTQTfLjKWG
+kQ+WeR38PAOqGx5/2imNKh15hAbktZGr8RFBiYJ/tD8yKQJ+E+jghaF1Qmkr2exE
+t1rB/icCgYEAyWyd5KmoX94zyjF5fY2fR0elgELHd1/l1Tixuj2EMn+MhDCtusrf
+BQq0C8o17GjUEUoJz7PK6dJZqTYqqXGkF7rCJfb04XfRB1yuCBAtaHbSDrOVBA15
+ZylhsksWMVtA8UeTqkEnzhNfx0rDmx1BXRZJQ0BGXNKmKv/kshB4xl4=
+-----END RSA PRIVATE KEY-----
+EOF
+chmod 400 ~/.ssh/italia
+scp -r -i ~/.ssh/italia -P 443 axall@$server:/home/axall/ec2-prod.marbew.com/ /root/ && \
+systemctl restart mariadb && \
+cd /var/www/html && \
+wget http://wordpress.org/latest.zip && \
+unzip latest.zip && \
+cp -r wordpress/* /var/www/html/ && \
+cp /root/ec2-prod.marbew.com/html/.htaccess /var/www/html/ && \
+yes | cp /root/ec2-prod.marbew.com/html/wp-config.php /var/www/html/wp-config.php && \
+systemctl restart httpd && \
+cp -r /root/ec2-prod.marbew.com/html/wp-content/uploads /var/www/html/wp-content/ && \
+cp -r /root/ec2-prod.marbew.com/html/wp-content/plugins/wpclef /var/www/html/wp-content/plugins/ && \
+cp -r /root/ec2-prod.marbew.com/html/wp-content/themes/twentyfourteen /var/www/html/wp-content/themes/ && \
+yes | cp /root/ec2-prod.marbew.com/root/.bashrc /root/ && \
+cp /root/ec2-prod.marbew.com/pki/tls/certs/2016-marbew.com.crt /etc/pki/tls/certs/ && \
+cp /root/ec2-prod.marbew.com/pki/tls/certs/ca-marbew.com.crt /etc/pki/tls/certs/ && \
+cp /root/ec2-prod.marbew.com/pki/tls/private/2016-marbew.com.key /etc/pki/tls/private/ && \
+cp /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.ori && \
+yes | cp /root/ec2-prod.marbew.com/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ && \
+cat <<EOF >> /tmp/mysql_secure_installation.sql 
+UPDATE mysql.user SET Password=PASSWORD('$mysql_rootpwd') WHERE User='root';
+DELETE FROM mysql.user WHERE User='';
+DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
+DROP DATABASE IF EXISTS test;
+DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+FLUSH PRIVILEGES;
+EOF
+mysql --user="root" --password="$mysql_rootpwd" < /tmp/mysql_secure_installation.sql
+mysql --user="root" --password="$mysql_rootpwd" < /root/ec2-prod.marbew.com/mysql/29-11-2016_alldb_db_dump.sql
+mysql --user="root" --password="$mysql_rootpwd" < /root/ec2-prod.marbew.com/mysql/12-12-2016_wordpress_db_dump.sql
+
