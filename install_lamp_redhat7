@@ -8,7 +8,7 @@ echo -e "Type Mysql password server, followed by [ENTER]:"
 read mysql_rootpwd
 
 yum update -y && \
-yum install -y vim firewalld httpd mariadb-server mariadb php php-mysql mod_ssl mod_security wget sysstat mailx && \
+yum install -y vim firewalld httpd mariadb-server mariadb php php-mysql mod_ssl mod_security wget sysstat mailx unzip && \
 systemctl enable httpd mariadb && \
 systemctl restart firewalld httpd mariadb && \
 systemctl status firewalld httpd mariadb && \
