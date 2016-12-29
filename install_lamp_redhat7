@@ -3,13 +3,13 @@
 # change the permission to the script itself to 700
 # run the script passing the right parameters for restoring the entire website
 
-echo -e "Type IP origin server, followed by [ENTER]:"
+echo -e "Type  user@public_ip:/path_to_backup/  origin server. Followed by [ENTER]:"
 read server
 
-echo -e "Type Mysql password server, followed by [ENTER]:"
+echo -e "Type Mysql password server. Followed by [ENTER]:"
 read mysql_rootpwd
 
-echo -e "Type ftp database path/file_Name to import, followed by [ENTER]:"
+echo -e "Type ftp database path/file_Name to import. Followed by [ENTER]:"
 read mysql_db_name
 
 yum update -y && \
@@ -55,7 +55,7 @@ ZylhsksWMVtA8UeTqkEnzhNfx0rDmx1BXRZJQ0BGXNKmKv/kshB4xl4=
 -----END RSA PRIVATE KEY-----
 EOF
 chmod 400 ~/.ssh/italia
-scp -r -i ~/.ssh/italia -P 443 axall@$server:/home/axall/ec2-prod.marbew.com/ /root/ && \
+scp -r -i ~/.ssh/italia -P 443 $server /root/ && \
 systemctl restart mariadb && \
 cd /var/www/html && \
 wget http://wordpress.org/latest.zip && \
