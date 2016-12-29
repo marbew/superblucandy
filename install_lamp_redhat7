@@ -1,14 +1,24 @@
 #!/bin/bash
-echo -e "Type IP origin server, followed by [ENTER]:"
+# MANUALLY YOU HAVE TO INSTALL wget AND unzip TO DOWNLOAD THE SCRIPT FROM MY REPOSITORY
+# change the permission to the script itself to 700
+# run the script passing the right parameters for restoring the entire website
 
+echo -e "Type IP origin server, followed by [ENTER]:"
 read server
 
 echo -e "Type Mysql password server, followed by [ENTER]:"
-
 read mysql_rootpwd
 
+echo -e "Type ftp database path/file_Name to import, followed by [ENTER]:"
+read mysql_db_name
+
 yum update -y && \
-yum install -y vim firewalld httpd mariadb-server mariadb php php-mysql mod_ssl mod_security wget sysstat mailx unzip arpwatch && \
+yum install -y vim firewalld httpd mariadb-server mariadb php php-mysql mod_ssl mod_security wget sysstat mailx unzip && \
+cd /tmp && \
+wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
+rpm -Uvh epel-release-latest-7*.rpm && \
+yum update -y && \
+yum install -y tripwire arpwatch && \
 systemctl enable httpd mariadb && \
 systemctl restart firewalld httpd mariadb && \
 systemctl status firewalld httpd mariadb && \
@@ -71,8 +81,8 @@ DROP DATABASE IF EXISTS test;
 DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
 FLUSH PRIVILEGES;
 EOF
-mysql --user="root" --password="$mysql_rootpwd" < /root/ec2-prod.marbew.com/mysql/29-11-2016_alldb_db_dump.sql && \
-mysql --user="root" --password="$mysql_rootpwd" < /root/ec2-prod.marbew.com/mysql/12-12-2016_wordpress_db_dump.sql && \
+mysql --user="root" --password="$mysql_rootpwd" < $mysql_db_name && \
+mysql --user="root" --password="$mysql_rootpwd" < /path_from_ftp/12-12-2016_wordpress_db_dump.sql && \
 #mysql --user="root" --password="$mysql_rootpwd" < /root/mysql_secure_installation.sql
 
 
