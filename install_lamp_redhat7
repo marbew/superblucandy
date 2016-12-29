@@ -12,6 +12,7 @@ read mysql_rootpwd
 echo -e "Type ftp database path/file_Name to import. Followed by [ENTER]:"
 read mysql_db_name
 
+timedatectl set-timezone UTC && \
 yum update -y && \
 yum install -y vim firewalld httpd mariadb-server mariadb php php-mysql mod_ssl mod_security wget sysstat mailx unzip && \
 cd /tmp && \
@@ -19,9 +20,9 @@ wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
 rpm -Uvh epel-release-latest-7*.rpm && \
 yum update -y && \
 yum install -y tripwire arpwatch && \
-systemctl enable httpd mariadb && \
-systemctl restart firewalld httpd mariadb && \
-systemctl status firewalld httpd mariadb && \
+systemctl enable httpd mariadb arpwatch && \
+systemctl restart firewalld httpd mariadb arpwatch && \
+systemctl status firewalld httpd mariadb arpwatch && \
 firewall-cmd --permanent --add-service=http && \
 firewall-cmd --permanent --add-service=https && \
 firewall-cmd --reload && \
@@ -82,7 +83,7 @@ DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
 FLUSH PRIVILEGES;
 EOF
 mysql --user="root" --password="$mysql_rootpwd" < $mysql_db_name && \
-mysql --user="root" --password="$mysql_rootpwd" < /path_from_ftp/12-12-2016_wordpress_db_dump.sql && \
+#mysql --user="root" --password="$mysql_rootpwd" < /path_from_ftp/12-12-2016_wordpress_db_dump.sql && \
 #mysql --user="root" --password="$mysql_rootpwd" < /root/mysql_secure_installation.sql
 
 
