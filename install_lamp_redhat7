@@ -9,7 +9,7 @@ read server
 echo -e "Type Mysql password server. Followed by [ENTER]:"
 read mysql_rootpwd
 
-echo -e "Type ftp database path/file_Name to import. Followed by [ENTER]:"
+echo -e "Type ftp database Name to import. Followed by [ENTER]:"
 read mysql_db_name
 
 timedatectl set-timezone UTC && \
@@ -19,7 +19,7 @@ cd /tmp && \
 wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
 rpm -Uvh epel-release-latest-7*.rpm && \
 yum update -y && \
-yum install -y tripwire arpwatch && \
+yum install -y tripwire arpwatch whois && \
 systemctl enable httpd mariadb arpwatch && \
 systemctl restart firewalld httpd mariadb arpwatch && \
 systemctl status firewalld httpd mariadb arpwatch && \
@@ -56,6 +56,8 @@ ZylhsksWMVtA8UeTqkEnzhNfx0rDmx1BXRZJQ0BGXNKmKv/kshB4xl4=
 -----END RSA PRIVATE KEY-----
 EOF
 chmod 400 ~/.ssh/italia
+
+# copy all backup to new server
 scp -r -i ~/.ssh/italia -P 443 $server /root/ && \
 systemctl restart mariadb && \
 cd /var/www/html && \
@@ -82,6 +84,7 @@ DROP DATABASE IF EXISTS test;
 DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
 FLUSH PRIVILEGES;
 EOF
+gzip -d < wp-marbew.com-29-12-2016-1483049512-sql.gz > wp-marbew.com-29-12-2016-1483049512-sql
 mysql --user="root" --password="$mysql_rootpwd" < $mysql_db_name && \
 #mysql --user="root" --password="$mysql_rootpwd" < /path_from_ftp/12-12-2016_wordpress_db_dump.sql && \
 #mysql --user="root" --password="$mysql_rootpwd" < /root/mysql_secure_installation.sql
