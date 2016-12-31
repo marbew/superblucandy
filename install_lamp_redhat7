@@ -80,8 +80,6 @@ echo "file compressed on backup server"
 scp -r -i ~/.ssh/italia -P 443 $server:$uploadable /root/ && \
 tar -xzf /root/uploadable.tar.gz
 ssh -i ~/.ssh/italia $server -p 443 rm -rf $uploadable
-tar -xzf /root/uploadable.tar.gz
-
 
 echo -e "\n\nINSTALLING WORDPRESS UPDATED"
 cd /var/www/html && \
