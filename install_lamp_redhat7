@@ -88,8 +88,8 @@ cp /root/ec2-prod.marbew.com/my-backup/pki/tls/private/2016-marbew.com.key /etc/
 cp /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.ori && \
 yes | cp /root/ec2-prod.marbew.com/my-backup/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ && \
 echo "INSTALL DATABASE"
-gzip -d < /root/ec2-prod.marbew.com/my-backup/mysql/$mysql_db_name > db.sql && \
-mysql < /root/ec2-prod.marbew.com/my-backup/mysql/db.sql
+gzip -d < /root/ec2-prod.marbew.com/my-backup/mysql/$mysql_db_name > /root/ec2-prod.marbew.com/my-backup/mysql/db-sql && \
+mysql < /root/ec2-prod.marbew.com/my-backup/mysql/db-sql
 systemctl restart httpd mariadb
 systemctl status httpd mariadb
 echo "READY TO GO $(curl icanhazip.com)"
