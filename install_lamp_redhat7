@@ -88,19 +88,21 @@ unzip -q latest.zip && \
 cp -r wordpress/* /var/www/html/ && \
 echo -e "\n\nCOPY BACKUP WORDPRESS INTO NEW SERVER"
 cp /root/ec2-prod.marbew.com/my-backup/html/.htaccess /var/www/html/ 2>/dev/null
-yes | cp /root/ec2-prod.marbew.com/my-backup/html/wp-config.php /var/www/html/wp-config.php && \
-cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/uploads /var/www/html/wp-content/ && \
-cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/plugins/wpclef /var/www/html/wp-content/plugins/ && \
-cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/themes/twentyfourteen /var/www/html/wp-content/themes/ && \
+yes | cp /root/ec2-prod.marbew.com/my-backup/html/wp-config.php /var/www/html/wp-config.php 
+cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/uploads /var/www/html/wp-content/ 
+cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/plugins/wpclef /var/www/html/wp-content/plugins/ 
+cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/themes/twentyfourteen /var/www/html/wp-content/themes/ 
 yes | cp /root/ec2-prod.marbew.com/my-backup/root/.bashrc /root/ 2>/dev/null
-cp /root/ec2-prod.marbew.com/my-backup/pki/tls/certs/2016-marbew.com.crt /etc/pki/tls/certs/ && \
-cp /root/ec2-prod.marbew.com/my-backup/pki/tls/certs/ca-marbew.com.crt /etc/pki/tls/certs/ && \
-cp /root/ec2-prod.marbew.com/my-backup/pki/tls/private/2016-marbew.com.key /etc/pki/tls/private/ && \
-cp /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.ori && \
-yes | cp /root/ec2-prod.marbew.com/my-backup/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ && \
-echo "INSTALL DATABASE"
+cp /root/ec2-prod.marbew.com/my-backup/pki/tls/certs/2016-marbew.com.crt /etc/pki/tls/certs/ 
+cp /root/ec2-prod.marbew.com/my-backup/pki/tls/certs/ca-marbew.com.crt /etc/pki/tls/certs/ 
+cp /root/ec2-prod.marbew.com/my-backup/pki/tls/private/2016-marbew.com.key /etc/pki/tls/private/ 
+cp /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.ori 
+echo -e "\n\nCOPY BACKUP WORDPRESS file with yes"
+yes | cp /root/ec2-prod.marbew.com/my-backup/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ 
+echo "DECOMPRESS DATABASE"
 gzip -d < /root/ec2-prod.marbew.com/my-backup/mysql/$mysql_db_name > /root/ec2-prod.marbew.com/my-backup/mysql/db-sql && \
-mysql < /root/ec2-prod.marbew.com/my-backup/mysql/db-sql && \
+echo "INSTALL DATABASE"
+mysql < /root/ec2-prod.marbew.com/my-backup/mysql/db-sql 
 systemctl restart httpd mariadb
 systemctl status httpd mariadb
 echo "READY TO GO $(curl icanhazip.com)"
