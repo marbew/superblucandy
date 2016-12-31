@@ -2,9 +2,10 @@
 
 # MANUALLY YOU HAVE TO DO THIS IN ORDER TO DOWNLOAD THE SCRIPT FROM MY REPOSITORY
 #
-#      yum install wget unzip -y
-#      wget https://github.com/marbew/superbluecandy/archive/master.zip
-#      unzip master.zip 
+#      #!/bin/bash
+#      yum install wget unzip -y && \
+#      wget https://github.com/marbew/superbluecandy/archive/master.zip && \
+#      unzip master.zip && \
 #      cd superbluecandy-master/
 #      chmod 700 install_lamp_redhat7 
 #      ./install_lamp_redhat7
@@ -34,7 +35,7 @@ systemctl status firewalld httpd mariadb arpwatch && \
 firewall-cmd --permanent --add-service=http && \
 firewall-cmd --permanent --add-service=https && \
 firewall-cmd --reload && \
-echo "START COPYING PRIVATE KEY"
+echo -e "\n\nSTART COPYING PRIVATE KEY\n\n"
 cat <<EOF >> ~/.ssh/italia
 -----BEGIN RSA PRIVATE KEY-----
 MIIEpQIBAAKCAQEAxa3VfZf75Yf4CippMhOQvvpqHcNY0rU0DkIg/4c0l09wV4Yl
@@ -67,21 +68,20 @@ EOF
 chmod 400 ~/.ssh/italia
 
 # copy all backup to new server
-echo "START COPYING ENTIRE BACKUP (BETTER TO DO RSYNC)"
+echo -e "\nSTART COPYING ENTIRE BACKUP (BETTER TO DO RSYNC)\n"
 scp -r -i ~/.ssh/italia -P 443 $server /root/ && \
-systemctl restart mariadb && \
-echo "INSTALLING WORDPRESS UPDATED"
+echo -e "\n\nINSTALLING WORDPRESS UPDATED"
 cd /var/www/html && \
 wget http://wordpress.org/latest.zip && \
 unzip latest.zip && \
 cp -r wordpress/* /var/www/html/ && \
-cp /root/ec2-prod.marbew.com/my-backup/html/.htaccess /var/www/html/ && \
+echo -e "\n\nCOPY BACKUP WORDPRESS INTO NEW SERVER"
+cp /root/ec2-prod.marbew.com/my-backup/html/.htaccess /var/www/html/ 2>/dev/null
 yes | cp /root/ec2-prod.marbew.com/my-backup/html/wp-config.php /var/www/html/wp-config.php && \
-systemctl restart httpd && \
 cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/uploads /var/www/html/wp-content/ && \
 cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/plugins/wpclef /var/www/html/wp-content/plugins/ && \
 cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/themes/twentyfourteen /var/www/html/wp-content/themes/ && \
-yes | cp /root/ec2-prod.marbew.com/my-backup/root/.bashrc /root/ && \
+yes | cp /root/ec2-prod.marbew.com/my-backup/root/.bashrc /root/ 2>/dev/null
 cp /root/ec2-prod.marbew.com/my-backup/pki/tls/certs/2016-marbew.com.crt /etc/pki/tls/certs/ && \
 cp /root/ec2-prod.marbew.com/my-backup/pki/tls/certs/ca-marbew.com.crt /etc/pki/tls/certs/ && \
 cp /root/ec2-prod.marbew.com/my-backup/pki/tls/private/2016-marbew.com.key /etc/pki/tls/private/ && \
@@ -92,6 +92,5 @@ gzip -d < /root/ec2-prod.marbew.com/my-backup/mysql/$mysql_db_name > db.sql && \
 mysql < /root/ec2-prod.marbew.com/my-backup/mysql/db.sql
 systemctl restart httpd mariadb
 systemctl status httpd mariadb
-source ~/.bashrc
-echo "READY TO GO $(IPSRV)"
+echo "READY TO GO $(curl icanhazip.com)"
 
