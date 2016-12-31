@@ -12,8 +12,11 @@
 #
 #run the script passing the right parameters for restoring the entire website
 
-echo -e "Type  user@public_ip:/path_to_backup/  origin server. Followed by [ENTER]:"
+echo -e "Type user@public_ip  backup_server. Followed by [ENTER]:"
 read server
+
+echo -e "Type /path_to_backup/uploadable.tar.gz backup_server. Followed by [ENTER]:"
+read uploadable
 
 echo -e "Type Mysql password server. Followed by [ENTER]:"
 read mysql_rootpwd
@@ -68,8 +71,18 @@ EOF
 chmod 400 ~/.ssh/italia
 
 # copy all backup to new server
-echo -e "\nSTART COPYING ENTIRE BACKUP (BETTER TO DO RSYNC)\n"
-scp -r -i ~/.ssh/italia -P 443 $server /root/ && \
+echo -e "\nSTART COPYING ENTIRE BACKUP \n"
+#scp -r -i ~/.ssh/italia -P 443 $server /root/ && \
+
+
+ssh -i ~/.ssh/italia $server -p 443 /home/axall/latest_backup
+echo "file compressed"
+scp -r -i ~/.ssh/italia -P 443 $server:$uploadable /root/ && \
+tar -xzf /root/uploadable.tar.gz
+ssh -i ~/.ssh/italia $server -p 443 rm -rf $uploadable
+tar -xzf /root/uploadable.tar.gz
+
+
 echo -e "\n\nINSTALLING WORDPRESS UPDATED"
 cd /var/www/html && \
 wget http://wordpress.org/latest.zip && \
