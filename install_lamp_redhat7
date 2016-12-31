@@ -21,7 +21,7 @@ read uploadable
 echo -e "Type Mysql password server. Followed by [ENTER]:"
 read mysql_rootpwd
 
-echo -e "Type ftp database Name to import. Followed by [ENTER]:"
+echo -e "Type Database Name to import. Followed by [ENTER]:"
 read mysql_db_name
 
 timedatectl set-timezone UTC && \
