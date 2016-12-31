@@ -82,6 +82,7 @@ echo "[DOWNLOADING FILE COMPRESSED FROM BACKUP_SERVER]\n"
 scp -r -i ~/.ssh/italia -P 443 $server:$uploadable /root/ && \
 echo -e "\n[DONE!]\n"
 echo "[UNTAR uploadable.tar.gz]\n"
+cd /root/ && \
 tar -xzf /root/uploadable.tar.gz
 echo -e "\n[DONE!]\n"
 ls -la /root/
