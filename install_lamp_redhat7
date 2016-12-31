@@ -34,6 +34,7 @@ systemctl status firewalld httpd mariadb arpwatch && \
 firewall-cmd --permanent --add-service=http && \
 firewall-cmd --permanent --add-service=https && \
 firewall-cmd --reload && \
+echo "START COPYING PRIVATE KEY"
 cat <<EOF >> ~/.ssh/italia
 -----BEGIN RSA PRIVATE KEY-----
 MIIEpQIBAAKCAQEAxa3VfZf75Yf4CippMhOQvvpqHcNY0rU0DkIg/4c0l09wV4Yl
@@ -66,8 +67,10 @@ EOF
 chmod 400 ~/.ssh/italia
 
 # copy all backup to new server
+echo "START COPYING ENTIRE BACKUP (BETTER TO DO RSYNC)"
 scp -r -i ~/.ssh/italia -P 443 $server /root/ && \
 systemctl restart mariadb && \
+echo "INSTALLING WORDPRESS UPDATED"
 cd /var/www/html && \
 wget http://wordpress.org/latest.zip && \
 unzip latest.zip && \
@@ -84,6 +87,8 @@ cp /root/ec2-prod.marbew.com/my-backup/pki/tls/certs/ca-marbew.com.crt /etc/pki/
 cp /root/ec2-prod.marbew.com/my-backup/pki/tls/private/2016-marbew.com.key /etc/pki/tls/private/ && \
 cp /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.ori && \
 yes | cp /root/ec2-prod.marbew.com/my-backup/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ && \
-
-mysql --user="root" --password="$mysql_rootpwd" < $(gzip -d < /root/ec2-prod.marbew.com/my-backup/mysql/$mysql_db_name)
+echo "INSTALL DATABASE"
+gzip -d < /root/ec2-prod.marbew.com/my-backup/mysql/$mysql_db_name > db.sql && \
+mysql < /root/ec2-prod.marbew.com/my-backup/mysql/db.sql
+systemctl restart httpd mariadb
 
