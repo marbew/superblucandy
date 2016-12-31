@@ -74,9 +74,9 @@ chmod 400 ~/.ssh/italia
 echo -e "\nSTART COPYING ENTIRE BACKUP \n"
 #scp -r -i ~/.ssh/italia -P 443 $server /root/ && \
 
-
+# execute compression on backup server
 ssh -i ~/.ssh/italia $server -p 443 /home/axall/latest_backup
-echo "file compressed"
+echo "file compressed on backup server"
 scp -r -i ~/.ssh/italia -P 443 $server:$uploadable /root/ && \
 tar -xzf /root/uploadable.tar.gz
 ssh -i ~/.ssh/italia $server -p 443 rm -rf $uploadable
