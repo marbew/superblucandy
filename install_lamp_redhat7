@@ -1,7 +1,15 @@
 #!/bin/bash
-# MANUALLY YOU HAVE TO INSTALL wget AND unzip TO DOWNLOAD THE SCRIPT FROM MY REPOSITORY
-# change the permission to the script itself to 700
-# run the script passing the right parameters for restoring the entire website
+
+# MANUALLY YOU HAVE TO DO THIS IN ORDER TO DOWNLOAD THE SCRIPT FROM MY REPOSITORY
+#
+#      yum install wget unzip -y
+#      wget https://github.com/marbew/superbluecandy/archive/master.zip
+#      unzip master.zip 
+#      cd superbluecandy-master/
+#      chmod 700 install_lamp_redhat7 
+#      ./install_lamp_redhat7
+#
+#run the script passing the right parameters for restoring the entire website
 
 echo -e "Type  user@public_ip:/path_to_backup/  origin server. Followed by [ENTER]:"
 read server
