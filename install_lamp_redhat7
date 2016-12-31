@@ -91,4 +91,7 @@ echo "INSTALL DATABASE"
 gzip -d < /root/ec2-prod.marbew.com/my-backup/mysql/$mysql_db_name > db.sql && \
 mysql < /root/ec2-prod.marbew.com/my-backup/mysql/db.sql
 systemctl restart httpd mariadb
+systemctl status httpd mariadb
+source ~/.bashrc
+echo "READY TO GO $(IPSRV)"
 
