@@ -73,7 +73,7 @@ scp -r -i ~/.ssh/italia -P 443 $server /root/ && \
 echo -e "\n\nINSTALLING WORDPRESS UPDATED"
 cd /var/www/html && \
 wget http://wordpress.org/latest.zip && \
-unzip latest.zip && \
+unzip -q latest.zip && \
 cp -r wordpress/* /var/www/html/ && \
 echo -e "\n\nCOPY BACKUP WORDPRESS INTO NEW SERVER"
 cp /root/ec2-prod.marbew.com/my-backup/html/.htaccess /var/www/html/ 2>/dev/null
