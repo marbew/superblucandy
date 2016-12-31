@@ -38,7 +38,7 @@ systemctl status firewalld httpd mariadb arpwatch && \
 firewall-cmd --permanent --add-service=http && \
 firewall-cmd --permanent --add-service=https && \
 firewall-cmd --reload && \
-echo -e "\n\nSTART COPYING PRIVATE KEY\n\n"
+echo -e "\nSTART COPYING PRIVATE KEY\n\n"
 cat <<EOF >> ~/.ssh/italia
 -----BEGIN RSA PRIVATE KEY-----
 MIIEpQIBAAKCAQEAxa3VfZf75Yf4CippMhOQvvpqHcNY0rU0DkIg/4c0l09wV4Yl
@@ -76,9 +76,12 @@ echo -e "\nSTART COPYING ENTIRE BACKUP \n"
 
 # execute compression on backup server
 ssh -i ~/.ssh/italia $server -p 443 /home/axall/latest_backup
-echo "file compressed on backup server"
+echo "Downloading file compressed from backup server"
 scp -r -i ~/.ssh/italia -P 443 $server:$uploadable /root/ && \
+echo "De-compressed uploadable.tar.gz"
 tar -xzf /root/uploadable.tar.gz
+echo "Done!"
+echo "Deleting tempfile on backup_server "
 ssh -i ~/.ssh/italia $server -p 443 rm -rf $uploadable
 
 echo -e "\n\nINSTALLING WORDPRESS UPDATED"
