@@ -76,17 +76,6 @@ cp /root/ec2-prod.marbew.com/pki/tls/certs/ca-marbew.com.crt /etc/pki/tls/certs/
 cp /root/ec2-prod.marbew.com/pki/tls/private/2016-marbew.com.key /etc/pki/tls/private/ && \
 cp /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.ori && \
 yes | cp /root/ec2-prod.marbew.com/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ && \
-cat <<EOF >> /tmp/mysql_secure_installation.sql 
-UPDATE mysql.user SET Password=PASSWORD('$mysql_rootpwd') WHERE User='root';
-DELETE FROM mysql.user WHERE User='';
-DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
-DROP DATABASE IF EXISTS test;
-DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
-FLUSH PRIVILEGES;
-EOF
-gzip -d < wp-marbew.com-29-12-2016-1483049512-sql.gz > wp-marbew.com-29-12-2016-1483049512-sql
-mysql --user="root" --password="$mysql_rootpwd" < $mysql_db_name && \
-#mysql --user="root" --password="$mysql_rootpwd" < /path_from_ftp/12-12-2016_wordpress_db_dump.sql && \
-#mysql --user="root" --password="$mysql_rootpwd" < /root/mysql_secure_installation.sql
 
+mysql --user="root" --password="$mysql_rootpwd" < $(gzip -d < $mysql_db_name)
 
