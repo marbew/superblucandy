@@ -12,7 +12,7 @@
 #
 #run the script passing the right parameters for restoring the entire website
 
-echo -e "Type user@public_ip  backup_server. Followed by [ENTER]:"
+echo -e "\n\nType user@public_ip  backup_server. Followed by [ENTER]:"
 read server
 
 echo -e "Type /path_to_backup/uploadable.tar.gz backup_server. Followed by [ENTER]:"
@@ -38,7 +38,7 @@ systemctl status firewalld httpd mariadb arpwatch && \
 firewall-cmd --permanent --add-service=http && \
 firewall-cmd --permanent --add-service=https && \
 firewall-cmd --reload && \
-echo -e "\n[START COPYING PRIVATE KEY]"
+#echo -e "\n[START COPYING PRIVATE KEY]"
 cat <<EOF >> ~/.ssh/italia
 -----BEGIN RSA PRIVATE KEY-----
 MIIEpQIBAAKCAQEAxa3VfZf75Yf4CippMhOQvvpqHcNY0rU0DkIg/4c0l09wV4Yl
@@ -68,52 +68,42 @@ BQq0C8o17GjUEUoJz7PK6dJZqTYqqXGkF7rCJfb04XfRB1yuCBAtaHbSDrOVBA15
 ZylhsksWMVtA8UeTqkEnzhNfx0rDmx1BXRZJQ0BGXNKmKv/kshB4xl4=
 -----END RSA PRIVATE KEY-----
 EOF
-echo -e "\n[DONE!]\n"
+#echo -e "\n[DONE!]\n"
 chmod 400 ~/.ssh/italia
 
-# copy all backup to new server
-echo -e "\n[START COPYING ENTIRE BACKUP] \n"
-#scp -r -i ~/.ssh/italia -P 443 $server /root/ && \
-
-echo -e "\n[EXECUTE COMPRESSION ON BACKUP_SERVER]"
+echo -e "\n[START COPYING ENTIRE BACKUP]"
 ssh -i ~/.ssh/italia $server -p 443 /home/axall/latest_backup
-echo -e "\n[DONE!]\n"
-echo "[DOWNLOADING FILE COMPRESSED FROM BACKUP_SERVER]"
 scp -r -i ~/.ssh/italia -P 443 $server:$uploadable /root/ && \
-echo -e "\n[DONE!]\n"
-echo "[UNTAR uploadable.tar.gz]\n"
 cd /root/ && \
 tar -xzf /root/uploadable.tar.gz
 echo -e "\n[DONE!]\n"
 ls -la /root/
-echo -e "\n\n[DELETING TEMP FILE FROM BACKUP SERVER] "
+#echo -e "\n\n[DELETING TEMP FILE FROM BACKUP SERVER] "
 ssh -i ~/.ssh/italia $server -p 443 rm -rf $uploadable
-echo -e "\n[DONE!]\n"
+#echo -e "\n[DONE!]\n"
 echo -e "\n\n[INSTALLING WORDPRESS UPDATED]"
 cd /var/www/html && \
 wget http://wordpress.org/latest.zip && \
 unzip -q latest.zip && \
 cp -r wordpress/* /var/www/html/ && \
 echo -e "\n[DONE!]\n"
-echo -e "\n\n[COPY BACKUP WORDPRESS INTO NEW SERVER]"
+#echo -e "\n\n[COPY BACKUP WORDPRESS INTO NEW SERVER]"
 cp /root/ec2-prod.marbew.com/my-backup/html/.htaccess /var/www/html/ 2>/dev/null
-echo -e "\n\n[COPY BACKUP WORDPRESS file with yes]"
 yes | cp /root/ec2-prod.marbew.com/my-backup/html/wp-config.php /var/www/html/wp-config.php 
-echo -e "\n[DONE!]\n"
 cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/uploads /var/www/html/wp-content/ 
 cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/plugins/wpclef /var/www/html/wp-content/plugins/ 
 cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/themes/twentyfourteen /var/www/html/wp-content/themes/ 
-echo -e "\n\n[COPY BACKUP WORDPRESS file with yes]"
 yes | cp /root/ec2-prod.marbew.com/my-backup/root/.bashrc /root/ 2>/dev/null
-echo -e "\n[DONE!]\n"
 cp /root/ec2-prod.marbew.com/my-backup/pki/tls/certs/2016-marbew.com.crt /etc/pki/tls/certs/ 
 cp /root/ec2-prod.marbew.com/my-backup/pki/tls/certs/ca-marbew.com.crt /etc/pki/tls/certs/ 
 cp /root/ec2-prod.marbew.com/my-backup/pki/tls/private/2016-marbew.com.key /etc/pki/tls/private/ 
 cp /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.ori 
-echo -e "\n\n[COPY BACKUP WORDPRESS file with yes]"
 yes | cp /root/ec2-prod.marbew.com/my-backup/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ 
-echo -e "\n[DONE!]\n"
-echo "[DECOMPRESS DATABASE]"
+yes | cp -r /root/ec2-prod.marbew.com/my-backup/root/* /root/
+yes | cp -r /root/ec2-prod.marbew.com/my-backup/cron* /etc/
+rm -rf /var/www/html/latest.zip
+rm -rf /var/www/html/wordpress
+#echo "[DECOMPRESS DATABASE]"
 gzip -d < /root/ec2-prod.marbew.com/my-backup/mysql/$mysql_db_name > /root/ec2-prod.marbew.com/my-backup/mysql/db-sql
 echo "[INSTALL DATABASE]"
 mysql < /root/ec2-prod.marbew.com/my-backup/mysql/db-sql 
