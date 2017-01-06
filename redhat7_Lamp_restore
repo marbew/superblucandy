@@ -10,7 +10,7 @@
 #      chmod 700 install_lamp_redhat7 
 #      ./install_lamp_redhat7
 #
-#run the script passing the right parameters for restoring the entire website
+#run the script passing the right parameters for restoring the entire production website
 
 echo -e "\n\nEnter user@publicip  backup_server. Followed by [ENTER]:"
 read server
