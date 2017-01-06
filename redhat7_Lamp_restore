@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# MANUALLY YOU HAVE TO DO THIS IN ORDER TO DOWNLOAD THE SCRIPT FROM MY REPOSITORY
+# THE ONLY MANUAL THING TO DO IS TO DOWNLOAD THE SCRIPT FROM MY REPOSITORY COPYING THIS COMMENTED CODE
 #
 #      #!/bin/bash
 #      yum install wget unzip -y && \
@@ -12,16 +12,16 @@
 #
 #run the script passing the right parameters for restoring the entire website
 
-echo -e "\n\nType user@public_ip  backup_server. Followed by [ENTER]:"
+echo -e "\n\nEnter user@publicip  backup_server. Followed by [ENTER]:"
 read server
 
-echo -e "Type /path_to_backup/uploadable.tar.gz backup_server. Followed by [ENTER]:"
+echo -e "Enter /path_to_backup/uploadable.tar.gz backup_server. Followed by [ENTER]:"
 read uploadable
 
-echo -e "Type Mysql password server. Followed by [ENTER]:"
+echo -e "Enter Mysql password server. Followed by [ENTER]:"
 read mysql_rootpwd
 
-echo -e "Type Database Name to import. Followed by [ENTER]:"
+echo -e "Enter Database Name to import. Followed by [ENTER]:"
 read mysql_db_name
 
 timedatectl set-timezone UTC && \
