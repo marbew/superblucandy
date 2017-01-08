@@ -7,8 +7,8 @@
 #      wget https://github.com/marbew/superbluecandy/archive/master.zip && \
 #      unzip master.zip && \
 #      cd superbluecandy-master/
-#      chmod 700 install_lamp_redhat7 
-#      ./install_lamp_redhat7
+#      chmod 700 redhat7_Lamp_restore 
+#      ./redhat7_Lamp_restore
 #
 #run the script passing the right parameters for restoring the entire production website
 
