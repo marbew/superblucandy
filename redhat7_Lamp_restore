@@ -1,14 +1,12 @@
 #!/bin/bash
-
-#      THE ONLY MANUAL THING TO DO IS:
-#      - CREATING A FILE ON NEW SERVER
-#      - COPYING THIS COMMENTED CODE
-#      - CHANGE PERMISSION AND EXECUTE IT
+# MARBEW.COM
+#
 #      
 #
-#      SIMPLIFIED FOR YOU, FROM ROOT USER:
+#      FROM ROOT USER, THE ONLY MANUAL THING TO DO IS:
 #      vi restore.sh && chmod 700 restore.sh && ./restore.sh
-#       
+#      
+#      COPYING THE BELOW COMMENTED CODE IN restore.sh:
 #
 #      #!/bin/bash
 #      yum update -y && \
