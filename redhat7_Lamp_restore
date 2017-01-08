@@ -3,6 +3,7 @@
 # THE ONLY MANUAL THING TO DO IS TO DOWNLOAD THE SCRIPT FROM MY REPOSITORY COPYING THIS COMMENTED CODE
 #
 #      #!/bin/bash
+#      yum update -y && \
 #      yum install wget unzip -y && \
 #      wget https://github.com/marbew/superbluecandy/archive/master.zip && \
 #      unzip master.zip && \
@@ -28,7 +29,6 @@ echo -e "[5 OF 5] Enter new Login User: "
 read NEWUSER
 
 timedatectl set-timezone UTC && \
-yum update -y && \
 yum install -y vim firewalld httpd mariadb-server mariadb php php-mysql mod_ssl mod_security wget sysstat mailx unzip && \
 cd /tmp && \
 wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
