@@ -83,7 +83,7 @@ EOF
 chmod 400 ~/.ssh/italia
 
 echo -e "\n[START COPYING ENTIRE BACKUP]"
-yes | ssh -i ~/.ssh/italia $server -p 443 /opt/latest_backup
+ssh -i ~/.ssh/italia -o StrictHostKeyChecking=no $server -p 443 /opt/latest_backup
 scp -r -i ~/.ssh/italia -P 443 $server:$uploadable /root/ && \
 cd /root/ && \
 tar -xzf /root/uploadable.tar.gz
