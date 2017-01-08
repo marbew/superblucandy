@@ -12,17 +12,20 @@
 #
 #run the script passing the right parameters for restoring the entire production website
 
-echo -e "\n\nEnter user@publicip  backup_server. Followed by [ENTER]:"
+echo -e "\n\n[1 OF 5] Enter USER@SERVER  backup_server: "
 read server
 
-echo -e "Enter /path_to_backup/uploadable.tar.gz backup_server. Followed by [ENTER]:"
+echo -e "[2 OF 5] Enter /path_to_backup/uploadable.tar.gz backup_server: "
 read uploadable
 
-echo -e "Enter Mysql password server. Followed by [ENTER]:"
+echo -e "[3 OF 5] Enter Mysql_password: "
 read mysql_rootpwd
 
-echo -e "Enter Database Name to import. Followed by [ENTER]:"
+echo -e "[4 OF 5] Enter Database to import: "
 read mysql_db_name
+
+echo -e "[5 OF 5] Enter new Login User: "
+read NEWUSER
 
 timedatectl set-timezone UTC && \
 yum update -y && \
@@ -111,5 +114,15 @@ mysql < /root/ec2-prod.marbew.com/my-backup/mysql/db-sql
 echo -e "\n[DONE!]\n"
 systemctl restart httpd mariadb
 systemctl status httpd mariadb
-echo "[READY TO GO] $(curl icanhazip.com)"
-
+#echo "[READY TO GO] $(curl icanhazip.com)"
+# add new user and block access to default one
+useradd $NEWUSER
+cd /home/ec2-user/
+yes | cp -R .* /home/$NEWUSER/
+yes | cp -R . /home/$NEWUSER/
+cd /home/$NEWUSER
+chown -R $NEWUSER:$NEWUSER *
+chown -R $NEWUSER:$NEWUSER .*
+echo "$NEWUSER           ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
+usermod -s /sbin/nologin ec2-user
+echo "[READY TO SSH IN WITH USER@SERVER: $NEWUSER@$(curl icanhazip.com)] "
