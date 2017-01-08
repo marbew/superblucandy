@@ -14,4 +14,3 @@ chmod 700 redhat7_Lamp_restore
 ./redhat7_Lamp_restore
 EOF
 chmod 700 restore.sh && ./restore.sh
-
