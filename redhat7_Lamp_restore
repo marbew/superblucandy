@@ -6,6 +6,9 @@
 #      - CHANGE PERMISSION AND EXECUTE IT
 #      
 #
+#      SIMPLIFIED FOR YOU, FROM ROOT USER:
+#
+#      cat <<EOF >> restore.sh 
 #      #!/bin/bash
 #      yum update -y && \
 #      yum install wget unzip -y && \
@@ -14,6 +17,8 @@
 #      cd superbluecandy-master/
 #      chmod 700 redhat7_Lamp_restore 
 #      ./redhat7_Lamp_restore
+#      EOF
+#      chmod 700 restore.sh && ./restore.sh
 #
 #run the script passing the right parameters for restoring the entire production website
 
