@@ -42,7 +42,7 @@ cd /tmp && \
 wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
 rpm -Uvh epel-release-latest-7*.rpm && \
 yum update -y && \
-yum install -y tripwire arpwatch whois screen bind-utils && \
+yum install -y tripwire arpwatch whois screen bind-utils mod_evasive && \
 systemctl enable httpd mariadb arpwatch && \
 systemctl restart firewalld httpd mariadb arpwatch && \
 systemctl status firewalld httpd mariadb arpwatch && \
