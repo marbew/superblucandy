@@ -102,7 +102,7 @@ echo -e "\n[DONE!]\n"
 cp /root/ec2-prod.marbew.com/my-backup/html/.htaccess /var/www/html/ 2>/dev/null
 yes | cp /root/ec2-prod.marbew.com/my-backup/html/wp-config.php /var/www/html/wp-config.php 
 cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/uploads /var/www/html/wp-content/ 
-cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/plugins/wpclef /var/www/html/wp-content/plugins/ 
+cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/plugins /var/www/html/wp-content/ 
 cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/themes/twentyfourteen /var/www/html/wp-content/themes/ 
 yes | cp /root/ec2-prod.marbew.com/my-backup/root/.bashrc /root/ 2>/dev/null
 cp /root/ec2-prod.marbew.com/my-backup/pki/tls/certs/2016-marbew.com.crt /etc/pki/tls/certs/ 
@@ -113,8 +113,10 @@ yes | cp /root/ec2-prod.marbew.com/my-backup/httpd/conf.d/ssl.conf /etc/httpd/co
 yes | cp /root/ec2-prod.marbew.com/my-backup/httpd/conf.d/mod_security.conf /etc/httpd/conf.d/
 yes | cp -r /root/ec2-prod.marbew.com/my-backup/root/* /root/
 yes | cp -r /root/ec2-prod.marbew.com/my-backup/cron* /etc/
+mkdir /my-backup
 rm -rf /var/www/html/latest.zip
 rm -rf /var/www/html/wordpress
+
 #echo "[DECOMPRESS DATABASE]"
 gzip -d < /root/ec2-prod.marbew.com/my-backup/mysql/$mysql_db_name > /root/ec2-prod.marbew.com/my-backup/mysql/db-sql
 echo "[INSTALL DATABASE]"
@@ -133,4 +135,7 @@ chown -R $NEWUSER:$NEWUSER *
 chown -R $NEWUSER:$NEWUSER .*
 echo "$NEWUSER           ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
 usermod -s /sbin/nologin ec2-user
+cd /root
+rm -rf uploadable.tar.gz superbluecandy-master master.zip ec2-prod.marbew.com anaconda-ks.cfg
 echo "[READY TO SSH IN WITH USER@SERVER: $NEWUSER@$(curl icanhazip.com)] "
+echo "[REMEMBER TO MOUNT: /my-backup in /etc/fstab with new UUID] "
