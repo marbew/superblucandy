@@ -21,6 +21,9 @@
 #
 #run the script passing the right parameters for restoring the entire production website
 
+echo -e "[0 OF 5] Enter RSA key: "
+read NEWRSA_key
+
 echo -e "\n\n[1 OF 5] Enter USER@SERVER  backup_server: "
 read server
 
@@ -35,6 +38,8 @@ read mysql_db_name
 
 echo -e "[5 OF 5] Enter new Login User: "
 read NEWUSER
+
+
 
 timedatectl set-timezone UTC && \
 yum install -y vim firewalld httpd mariadb-server mariadb php php-mysql mod_ssl mod_security wget sysstat mailx unzip && \
@@ -52,7 +57,7 @@ firewall-cmd --reload && \
 #echo -e "\n[START COPYING PRIVATE KEY]"
 cat <<EOF >> ~/.ssh/italia
 -----BEGIN RSA PRIVATE KEY-----
-
+echo $NEWRSA_key
 -----END RSA PRIVATE KEY-----
 EOF
 #echo -e "\n[DONE!]\n"
