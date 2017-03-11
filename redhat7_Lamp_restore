@@ -145,7 +145,7 @@ chown -R $NEWUSER:$NEWUSER .*
 echo "$NEWUSER           ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
 usermod -s /sbin/nologin ec2-user
 cd /root
-rm -rf uploadable.tar.gz superbluecandy-master master.zip ec2-prod.marbew.com anaconda-ks.cfg
+#rm -rf uploadable.tar.gz superbluecandy-master master.zip ec2-prod.marbew.com anaconda-ks.cfg
 echo "[READY TO SSH IN WITH USER@SERVER: $NEWUSER@$(curl icanhazip.com)] "
 echo "[REMEMBER TO MOUNT: /my-backup in /etc/fstab with new UUID] "
 echo "[REMEMBER TO SETUP TRIPWIRE KEYS IN ORDER TO RECEIVE STATUS EMAILS] "
