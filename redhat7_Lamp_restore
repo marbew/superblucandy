@@ -21,22 +21,25 @@
 #
 #run the script passing the right parameters for restoring the entire production website
 
-echo -e "[0 OF 5] Enter RSA key: "
-read NEWRSA_key
+echo -e "[0 OF 6] Enter port number of backup_server: "
+read servernump
 
-echo -e "\n\n[1 OF 5] Enter USER@SERVER  backup_server: "
+echo -e "\n\n[1 OF 6] Enter USER@SERVER  backup_server: "
 read server
 
-echo -e "[2 OF 5] Enter /path_to_backup/uploadable.tar.gz backup_server: "
+echo -e "[2 OF 6] Enter /path_to_backup/uploadable.tar.gz backup_server: "
 read uploadable
 
-echo -e "[3 OF 5] Enter Mysql_password: "
+echo -e "[3 OF 6] Enter Mysql_password: "
 read mysql_rootpwd
 
-echo -e "[4 OF 5] Enter Database to import: "
+echo -e "[4 OF 6] Enter Database to import: "
 read mysql_db_name
 
-echo -e "[5 OF 5] Enter new Login User: "
+echo -e "[5 OF 6] Enter Database decrypt password: "
+read opensslPWD
+
+echo -e "[6 OF 6] Enter new Login User: "
 read NEWUSER
 
 
@@ -88,14 +91,14 @@ EOF
 chmod 400 ~/.ssh/italia
 
 echo -e "\n[START COPYING ENTIRE BACKUP]"
-ssh -i ~/.ssh/italia -o StrictHostKeyChecking=no $server -p 443 /opt/latest_backup
-scp -r -i ~/.ssh/italia -P 443 $server:$uploadable /root/ && \
+ssh -i ~/.ssh/italia -o StrictHostKeyChecking=no $server -p $servernump /opt/latest_backup 2>/dev/null
+scp -r -i ~/.ssh/italia -P $servernump $server:$uploadable /root/ && \
 cd /root/ && \
 tar -xzf /root/uploadable.tar.gz
 echo -e "\n[DONE!]\n"
 ls -la /root/
 #echo -e "\n\n[DELETING TEMP FILE FROM BACKUP SERVER] "
-ssh -i ~/.ssh/italia $server -p 443 rm -rf $uploadable
+ssh -i ~/.ssh/italia $server -p $servernump rm -rf $uploadable
 #echo -e "\n[DONE!]\n"
 echo -e "\n\n[INSTALLING WORDPRESS UPDATED]"
 cd /var/www/html && \
@@ -123,7 +126,8 @@ rm -rf /var/www/html/latest.zip
 rm -rf /var/www/html/wordpress
 
 #echo "[DECOMPRESS DATABASE]"
-gzip -d < /root/ec2-prod.marbew.com/my-backup/mysql/$mysql_db_name > /root/ec2-prod.marbew.com/my-backup/mysql/db-sql
+openssl enc -d -aes-256-cbc -in /root/ec2-prod.marbew.com/my-backup/mysql/$mysql_db_name -out db.gz -k $opensslPWD
+gzip -d < /root/ec2-prod.marbew.com/my-backup/mysql/db.gz > /root/ec2-prod.marbew.com/my-backup/mysql/db-sql
 echo "[INSTALL DATABASE]"
 mysql < /root/ec2-prod.marbew.com/my-backup/mysql/db-sql 
 echo -e "\n[DONE!]\n"
