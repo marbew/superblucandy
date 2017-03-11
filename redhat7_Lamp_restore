@@ -122,12 +122,13 @@ yes | cp /root/ec2-prod.marbew.com/my-backup/httpd/conf.d/ssl.conf /etc/httpd/co
 yes | cp /root/ec2-prod.marbew.com/my-backup/httpd/conf.d/mod_security.conf /etc/httpd/conf.d/
 yes | cp -r /root/ec2-prod.marbew.com/my-backup/root/* /root/
 yes | cp -r /root/ec2-prod.marbew.com/my-backup/cron* /etc/
+cd /
 mkdir /my-backup
 rm -rf /var/www/html/latest.zip
 rm -rf /var/www/html/wordpress
 
 #echo "[DECOMPRESS DATABASE]"
-openssl enc -d -aes-256-cbc -in /root/ec2-prod.marbew.com/my-backup/mysql/$mysql_db_name -out db.gz -k $opensslPWD
+openssl enc -d -aes-256-cbc -in /root/ec2-prod.marbew.com/my-backup/mysql/$mysql_db_name -out /root/ec2-prod.marbew.com/my-backup/mysql/db.gz -k $opensslPWD
 gzip -d < /root/ec2-prod.marbew.com/my-backup/mysql/db.gz > /root/ec2-prod.marbew.com/my-backup/mysql/db-sql
 echo "[INSTALL DATABASE]"
 mysql < /root/ec2-prod.marbew.com/my-backup/mysql/db-sql 
