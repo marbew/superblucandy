@@ -21,7 +21,7 @@
 #
 #run the script passing the right parameters for restoring the entire production website
 
-echo -e "[0 OF 6] Enter port number of backup_server: "
+echo -e "[0 OF 6] Enter port number of backup_server[22]: "
 read servernump
 
 echo -e "\n\n[1 OF 6] Enter USER@SERVER  backup_server: "
@@ -30,10 +30,10 @@ read server
 echo -e "[2 OF 6] Enter /path_to_backup/uploadable.tar.gz backup_server: "
 read uploadable
 
-echo -e "[3 OF 6] Enter Mysql_password: "
+echo -e "[3 OF 6] Enter db_password: "
 read mysql_rootpwd
 
-echo -e "[4 OF 6] Enter Database to import: "
+echo -e "[4 OF 6] Enter Database name to import: "
 read mysql_db_name
 
 echo -e "[5 OF 6] Enter Database decrypt password: "
@@ -101,7 +101,7 @@ ls -la /root/
 #echo -e "\n\n[DELETING TEMP FILE FROM BACKUP SERVER] "
 ssh -i ~/.ssh/italia $server -p $servernump rm -rf $uploadable
 #echo -e "\n[DONE!]\n"
-echo -e "\n\n[INSTALLING WORDPRESS UPDATED]"
+echo -e "\n\n[INSTALLING LATEST WORDPRESS VERSION]"
 cd /var/www/html && \
 wget http://wordpress.org/latest.zip && \
 unzip -q latest.zip && \
@@ -110,6 +110,8 @@ echo -e "\n[DONE!]\n"
 #echo -e "\n\n[COPY BACKUP WORDPRESS INTO NEW SERVER]"
 cp /root/ec2-prod.marbew.com/my-backup/html/.htaccess /var/www/html/ 2>/dev/null
 yes | cp /root/ec2-prod.marbew.com/my-backup/html/wp-config.php /var/www/html/wp-config.php 
+yes | cp /root/ec2-prod.marbew.com/my-backup/html/php.ini /etc/php.ini 
+
 cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/uploads /var/www/html/wp-content/ 
 cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/plugins /var/www/html/wp-content/ 
 cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/themes/twentyfourteen /var/www/html/wp-content/themes/ 
@@ -122,6 +124,7 @@ yes | cp /root/ec2-prod.marbew.com/my-backup/httpd/conf.d/ssl.conf /etc/httpd/co
 yes | cp /root/ec2-prod.marbew.com/my-backup/httpd/conf.d/mod_security.conf /etc/httpd/conf.d/
 yes | cp -r /root/ec2-prod.marbew.com/my-backup/root/* /root/
 yes | cp -r /root/ec2-prod.marbew.com/my-backup/cron* /etc/
+
 cd /
 mkdir /my-backup
 rm -rf /var/www/html/latest.zip
