@@ -135,6 +135,8 @@ openssl enc -d -aes-256-cbc -in /root/ec2-prod.marbew.com/my-backup/mysql/$mysql
 gzip -d < /root/ec2-prod.marbew.com/my-backup/mysql/db.gz > /root/ec2-prod.marbew.com/my-backup/mysql/db-sql
 echo "[INSTALL DATABASE]"
 mysql < /root/ec2-prod.marbew.com/my-backup/mysql/db-sql 
+chown -R apache:apache /var/www/html/.*
+chown -R apache:apache /var/www/html/*
 echo -e "\n[DONE!]\n"
 systemctl restart httpd mariadb
 systemctl status httpd mariadb
