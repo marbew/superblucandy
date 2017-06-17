@@ -98,7 +98,7 @@ EOF
 chmod 400 ~/.ssh/italia
 
 echo -e "\n[COPYING BACKUP: STARTED]"
-#ssh -i ~/.ssh/italia -o StrictHostKeyChecking=no $server -p $servernump /opt/latest_backup 2>/dev/null
+ssh -i ~/.ssh/italia -o StrictHostKeyChecking=no $server -p $servernump /opt/latest_backup 2>/dev/null
 scp -r -i ~/.ssh/italia -P $servernump $server:$uploadable /root/ && \
 cd /root/ && \
 ls -la /root && \
