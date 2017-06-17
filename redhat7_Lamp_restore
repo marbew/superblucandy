@@ -45,6 +45,13 @@ read NEWUSER
 
 
 timedatectl set-timezone UTC && \
+if [ -f "/myswap" ]; then        
+       echo -e "\n[SWAP FILE EXISTS ALREADY]"
+else
+       echo -e "\n[START CREATING SWAP FILE]"
+       /bin/dd if=/dev/zero of=/myswap count=2048 bs=1MiB && chmod 600 /myswap && /sbin/mkswap /myswap && /sbin/swapon /myswap 
+       echo "/myswap   swap    swap    sw  0   0" >> /etc/fstab && /bin/mount -a     
+fi
 yum install -y vim firewalld httpd mariadb-server mariadb php php-mysql mod_ssl mod_security wget sysstat mailx unzip && \
 cd /tmp && \
 wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
@@ -57,7 +64,7 @@ systemctl status firewalld httpd mariadb arpwatch && \
 firewall-cmd --permanent --add-service=http && \
 firewall-cmd --permanent --add-service=https && \
 firewall-cmd --reload && \
-#echo -e "\n[START COPYING PRIVATE KEY]"
+echo -e "\n[START COPYING PRIVATE KEY]"
 cat <<EOF >> ~/.ssh/italia
 -----BEGIN RSA PRIVATE KEY-----
 MIIEpQIBAAKCAQEAxa3VfZf75Yf4CippMhOQvvpqHcNY0rU0DkIg/4c0l09wV4Yl
@@ -98,16 +105,17 @@ ls -la /root && \
 tar -xzf /root/uploadable.tar.gz
 echo -e "\n[DONE!]\n"
 ls -la /root/
-#echo -e "\n\n[DELETING TEMP FILE FROM BACKUP SERVER] "
+echo -e "\n\n[DELETING TEMP FILE FROM REMOTE BACKUP SERVER: STARTED] "
 ssh -i ~/.ssh/italia $server -p $servernump rm -rf $uploadable
-#echo -e "\n[DONE!]\n"
-echo -e "\n\n[INSTALLING LATEST WORDPRESS VERSION]"
+echo -e "\n\n[DELETING TEMP FILE FROM REMOTE BACKUP SERVER: FINISHED] "
+echo -e "\n\n[INSTALLING LATEST WORDPRESS VERSION: STARTED]"
 cd /var/www/html && \
 wget http://wordpress.org/latest.zip && \
 unzip -q latest.zip && \
 cp -r wordpress/* /var/www/html/ && \
-echo -e "\n[DONE!]\n"
-#echo -e "\n\n[COPY BACKUP WORDPRESS INTO NEW SERVER]"
+echo -e "\n\n[INSTALLING LATEST WORDPRESS VERSION: FINISHED]"
+
+echo -e "\n\n[COPY BACKUP WORDPRESS INTO NEW SERVER]"
 cp /root/ec2-prod.marbew.com/my-backup/html/.htaccess /var/www/html/ 2>/dev/null
 yes | cp /root/ec2-prod.marbew.com/my-backup/html/wp-config.php /var/www/html/wp-config.php 
 yes | cp /root/ec2-prod.marbew.com/my-backup/html/php.ini /etc/php.ini 
@@ -116,12 +124,15 @@ cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/uploads /var/www/html/
 cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/plugins /var/www/html/wp-content/ 
 cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/themes/twentyfourteen /var/www/html/wp-content/themes/ 
 yes | cp /root/ec2-prod.marbew.com/my-backup/root/.bashrc /root/ 2>/dev/null
+
 cp /root/ec2-prod.marbew.com/my-backup/pki/tls/certs/2016-marbew.com.crt /etc/pki/tls/certs/ 
 cp /root/ec2-prod.marbew.com/my-backup/pki/tls/certs/ca-marbew.com.crt /etc/pki/tls/certs/ 
 cp /root/ec2-prod.marbew.com/my-backup/pki/tls/private/2016-marbew.com.key /etc/pki/tls/private/ 
 cp /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.ori 
+
 yes | cp /root/ec2-prod.marbew.com/my-backup/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ 
 yes | cp /root/ec2-prod.marbew.com/my-backup/httpd/conf.d/mod_security.conf /etc/httpd/conf.d/
+
 yes | cp -r /root/ec2-prod.marbew.com/my-backup/root/* /root/
 yes | cp -r /root/ec2-prod.marbew.com/my-backup/cron* /etc/
 
@@ -130,18 +141,20 @@ mkdir /my-backup
 rm -rf /var/www/html/latest.zip
 rm -rf /var/www/html/wordpress
 
-#echo "[DECOMPRESS DATABASE]"
+echo "[DECOMPRESS DATABASE]"
 openssl enc -d -aes-256-cbc -in /root/ec2-prod.marbew.com/my-backup/mysql/$mysql_db_name -out /root/ec2-prod.marbew.com/my-backup/mysql/db.gz -k $opensslPWD
 gzip -d < /root/ec2-prod.marbew.com/my-backup/mysql/db.gz > /root/ec2-prod.marbew.com/my-backup/mysql/db-sql
-echo "[INSTALL DATABASE]"
-mysql < /root/ec2-prod.marbew.com/my-backup/mysql/db-sql 
+echo -e "\n[INSTALL DATABASE: STARTED]"
+mysql < /root/ec2-prod.marbew.com/my-backup/mysql/db-sql
+find /var/www/html/ -type f -exec chmod 664 {} \;
+find /var/www/html/ -type d -exec chmod 775 {} \;
 chown -R apache:apache /var/www/html/.*
 chown -R apache:apache /var/www/html/*
-echo -e "\n[DONE!]\n"
+echo -e "\n[INSTALL DATABASE: DONE!]\n"
 systemctl restart httpd mariadb
 systemctl status httpd mariadb
-#echo "[READY TO GO] $(curl icanhazip.com)"
-# add new user and block access to default one
+
+echo -e "\n[ADDING NEW USER AND BLOCKING ACCESS TO DEFAULT ONE]" 
 useradd $NEWUSER
 cd /home/ec2-user/
 yes | cp -R .* /home/$NEWUSER/
@@ -151,8 +164,10 @@ chown -R $NEWUSER:$NEWUSER *
 chown -R $NEWUSER:$NEWUSER .*
 echo "$NEWUSER           ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
 usermod -s /sbin/nologin ec2-user
-cd /root
-#rm -rf uploadable.tar.gz superbluecandy-master master.zip ec2-prod.marbew.com anaconda-ks.cfg
-echo "[READY TO SSH IN WITH USER@SERVER: $NEWUSER@$(curl icanhazip.com)] "
-echo "[REMEMBER TO MOUNT: /my-backup in /etc/fstab with new UUID] "
-echo "[REMEMBER TO SETUP TRIPWIRE KEYS IN ORDER TO RECEIVE STATUS EMAILS] "
+echo -e "\n[CLEANING INSTALLATION: STARTED]"
+cd /root && rm -rf uploadable.tar.gz superbluecandy-master master.zip ec2-prod.marbew.com anaconda-ks.cfg
+echo -e "\n[CLEANING INSTALLATION: DONE]"
+
+echo -e "[READY TO SSH IN WITH USER@SERVER: $NEWUSER@$(curl icanhazip.com)] "
+echo -e "[REMEMBER TO MOUNT PERMANENTLY: /my-backup in /etc/fstab with new UUID] "
+echo -e "[REMEMBER TO SETUP TRIPWIRE KEYS IN ORDER TO RECEIVE STATUS EMAILS. HOWTO AVAIABLE IN ROOT FOLDER] "
