@@ -118,7 +118,7 @@ echo -e "\n[INSTALLING LATEST WORDPRESS VERSION: FINISHED]"
 echo -e "\n[COPY BACKUP WORDPRESS INTO NEW SERVER]"
 cp /root/ec2-prod.marbew.com/my-backup/html/.htaccess /var/www/html/ 2>/dev/null
 yes | cp /root/ec2-prod.marbew.com/my-backup/html/wp-config.php /var/www/html/wp-config.php 
-yes | cp /root/ec2-prod.marbew.com/my-backup/html/php.ini /etc/php.ini 
+yes | cp /root/ec2-prod.marbew.com/my-backup/php.ini /etc/php.ini 
 
 cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/uploads /var/www/html/wp-content/ 
 cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/plugins /var/www/html/wp-content/ 
