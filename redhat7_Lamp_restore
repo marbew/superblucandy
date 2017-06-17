@@ -64,7 +64,7 @@ systemctl status firewalld httpd mariadb arpwatch && \
 firewall-cmd --permanent --add-service=http && \
 firewall-cmd --permanent --add-service=https && \
 firewall-cmd --reload && \
-echo -e "\n[START COPYING PRIVATE KEY]"
+echo -e "\n[COPYING PRIVATE KEY: STARTED]"
 cat <<EOF >> ~/.ssh/italia
 -----BEGIN RSA PRIVATE KEY-----
 MIIEpQIBAAKCAQEAxa3VfZf75Yf4CippMhOQvvpqHcNY0rU0DkIg/4c0l09wV4Yl
@@ -94,8 +94,8 @@ BQq0C8o17GjUEUoJz7PK6dJZqTYqqXGkF7rCJfb04XfRB1yuCBAtaHbSDrOVBA15
 ZylhsksWMVtA8UeTqkEnzhNfx0rDmx1BXRZJQ0BGXNKmKv/kshB4xl4=
 -----END RSA PRIVATE KEY-----
 EOF
-#echo -e "\n[DONE!]\n"
 chmod 400 ~/.ssh/italia
+echo -e "\n[COPYING PRIVATE KEY: FINISHED]"
 
 echo -e "\n[COPYING BACKUP: STARTED]"
 ssh -i ~/.ssh/italia -o StrictHostKeyChecking=no $server -p $servernump /opt/latest_backup 2>/dev/null
@@ -115,7 +115,7 @@ unzip -q latest.zip && \
 cp -r wordpress/* /var/www/html/ && \
 echo -e "\n[INSTALLING LATEST WORDPRESS VERSION: FINISHED]"
 
-echo -e "\n[COPY BACKUP WORDPRESS INTO NEW SERVER]"
+echo -e "\n[COPY BACKUP WORDPRESS INTO NEW SERVER: STARTED]"
 cp /root/ec2-prod.marbew.com/my-backup/html/.htaccess /var/www/html/ 2>/dev/null
 yes | cp /root/ec2-prod.marbew.com/my-backup/html/wp-config.php /var/www/html/wp-config.php 
 yes | cp /root/ec2-prod.marbew.com/my-backup/php.ini /etc/php.ini 
@@ -135,6 +135,7 @@ yes | cp /root/ec2-prod.marbew.com/my-backup/httpd/conf.d/mod_security.conf /etc
 
 yes | cp -r /root/ec2-prod.marbew.com/my-backup/root/* /root/
 yes | cp -r /root/ec2-prod.marbew.com/my-backup/cron* /etc/
+echo -e "\n[COPY BACKUP WORDPRESS INTO NEW SERVER: FINISHED]"
 
 cd /
 mkdir /my-backup
@@ -144,13 +145,15 @@ rm -rf /var/www/html/wordpress
 echo "[DECOMPRESS DATABASE]"
 openssl enc -d -aes-256-cbc -in /root/ec2-prod.marbew.com/my-backup/mysql/$mysql_db_name -out /root/ec2-prod.marbew.com/my-backup/mysql/db.gz -k $opensslPWD
 gzip -d < /root/ec2-prod.marbew.com/my-backup/mysql/db.gz > /root/ec2-prod.marbew.com/my-backup/mysql/db-sql
-echo -e "\n[INSTALL DATABASE: STARTED]"
+echo -e "\n[IMPORT DATABASE: STARTED]"
 mysql < /root/ec2-prod.marbew.com/my-backup/mysql/db-sql
 find /var/www/html/ -type f -exec chmod 664 {} \;
 find /var/www/html/ -type d -exec chmod 775 {} \;
 chown -R apache:apache /var/www/html/.*
 chown -R apache:apache /var/www/html/*
-echo -e "\n[INSTALL DATABASE: FINISHED]\n"
+mysql --user="root" --password=$mysql_rootpwd --database=wordpress -s --execute="drop database test;")
+echo $(mysql --user="root" --password=$mysql_rootpwd --database=wordpress -s --execute="select user_login from wp_users;")
+echo -e "\n[IMPORT DATABASE: FINISHED]\n"
 systemctl restart httpd mariadb
 systemctl status httpd mariadb
 
@@ -166,6 +169,7 @@ echo "$NEWUSER           ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
 usermod -s /sbin/nologin ec2-user
 echo -e "\n[CLEANING INSTALLATION: STARTED]"
 cd /root && rm -rf uploadable.tar.gz superbluecandy-master master.zip ec2-prod.marbew.com anaconda-ks.cfg
+ls -la /root/
 echo -e "\n[CLEANING INSTALLATION: DONE]"
 
 echo -e "[READY TO SSH IN WITH USER@SERVER: $NEWUSER@$(curl icanhazip.com)] "
