@@ -126,7 +126,8 @@ yes | cp /root/ec2-prod.marbew.com/my-backup/html/wp-config.php /var/www/html/wp
 yes | cp /root/ec2-prod.marbew.com/my-backup/php.ini /etc/php.ini 
 
 cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/uploads /var/www/html/wp-content/ 
-cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/plugins /var/www/html/wp-content/ 
+cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/plugins /var/www/html/wp-content/
+cp -r /root/ec2-prod.marbew.com/my-backup/html/wordfence-waf.php /var/www/html/ 
 cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/themes/twentyfourteen /var/www/html/wp-content/themes/ 
 yes | cp /root/ec2-prod.marbew.com/my-backup/root/.bashrc /root/ 2>/dev/null
 
