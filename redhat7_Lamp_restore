@@ -97,25 +97,25 @@ EOF
 #echo -e "\n[DONE!]\n"
 chmod 400 ~/.ssh/italia
 
-echo -e "\n[START COPYING ENTIRE BACKUP]"
+echo -e "\n[COPYING BACKUP: STARTED]"
 #ssh -i ~/.ssh/italia -o StrictHostKeyChecking=no $server -p $servernump /opt/latest_backup 2>/dev/null
 scp -r -i ~/.ssh/italia -P $servernump $server:$uploadable /root/ && \
 cd /root/ && \
 ls -la /root && \
 tar -xzf /root/uploadable.tar.gz
-echo -e "\n[DONE!]\n"
+echo -e "\n[COPYING BACKUP: FINISHED]"
 ls -la /root/
-echo -e "\n\n[DELETING TEMP FILE FROM REMOTE BACKUP SERVER: STARTED] "
+echo -e "\n[DELETING TEMP FILE FROM REMOTE BACKUP SERVER: STARTED] "
 ssh -i ~/.ssh/italia $server -p $servernump rm -rf $uploadable
-echo -e "\n\n[DELETING TEMP FILE FROM REMOTE BACKUP SERVER: FINISHED] "
-echo -e "\n\n[INSTALLING LATEST WORDPRESS VERSION: STARTED]"
+echo -e "\n[DELETING TEMP FILE FROM REMOTE BACKUP SERVER: FINISHED] "
+echo -e "\n[INSTALLING LATEST WORDPRESS VERSION: STARTED]"
 cd /var/www/html && \
 wget http://wordpress.org/latest.zip && \
 unzip -q latest.zip && \
 cp -r wordpress/* /var/www/html/ && \
-echo -e "\n\n[INSTALLING LATEST WORDPRESS VERSION: FINISHED]"
+echo -e "\n[INSTALLING LATEST WORDPRESS VERSION: FINISHED]"
 
-echo -e "\n\n[COPY BACKUP WORDPRESS INTO NEW SERVER]"
+echo -e "\n[COPY BACKUP WORDPRESS INTO NEW SERVER]"
 cp /root/ec2-prod.marbew.com/my-backup/html/.htaccess /var/www/html/ 2>/dev/null
 yes | cp /root/ec2-prod.marbew.com/my-backup/html/wp-config.php /var/www/html/wp-config.php 
 yes | cp /root/ec2-prod.marbew.com/my-backup/html/php.ini /etc/php.ini 
@@ -150,7 +150,7 @@ find /var/www/html/ -type f -exec chmod 664 {} \;
 find /var/www/html/ -type d -exec chmod 775 {} \;
 chown -R apache:apache /var/www/html/.*
 chown -R apache:apache /var/www/html/*
-echo -e "\n[INSTALL DATABASE: DONE!]\n"
+echo -e "\n[INSTALL DATABASE: FINISHED]\n"
 systemctl restart httpd mariadb
 systemctl status httpd mariadb
 
