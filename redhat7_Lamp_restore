@@ -52,12 +52,17 @@ else
        /bin/dd if=/dev/zero of=/myswap count=2048 bs=1MiB && chmod 600 /myswap && /sbin/mkswap /myswap && /sbin/swapon /myswap 
        echo "/myswap   swap    swap    sw  0   0" >> /etc/fstab && /bin/mount -a     
 fi
-yum install -y vim firewalld httpd mariadb-server mariadb php php-mysql mod_ssl mod_security wget sysstat mailx unzip && \
+yum install -y vim firewalld httpd mariadb-server mariadb php php-mysql mod_ssl mod_security wget curl sysstat mailx unzip && \
 cd /tmp && \
 wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
 rpm -Uvh epel-release-latest-7*.rpm && \
 yum update -y && \
 yum install -y tripwire arpwatch whois screen bind-utils mod_evasive && \
+cd /opt && curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+php wp-cli.phar --info
+chmod +x wp-cli.phar
+mv wp-cli.phar /usr/local/bin/wp
+
 systemctl enable httpd mariadb arpwatch && \
 systemctl restart firewalld httpd mariadb arpwatch && \
 systemctl status firewalld httpd mariadb arpwatch && \
