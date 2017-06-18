@@ -157,10 +157,11 @@ find /var/www/html/ -type f -exec chmod 664 {} \;
 find /var/www/html/ -type d -exec chmod 775 {} \;
 chown -R apache:apache /var/www/html/.*
 chown -R apache:apache /var/www/html/*
+systemctl restart mariadb 
 mysql --user="root" --password=$mysql_rootpwd --database=wordpress -s --execute="drop database test;"
 echo $(mysql --user="root" --password=$mysql_rootpwd --database=wordpress -s --execute="select user_login from wp_users;")
 echo -e "\n[IMPORT DATABASE: FINISHED]\n"
-systemctl restart httpd mariadb
+systemctl restart httpd 
 systemctl status httpd mariadb
 
 echo -e "\n[ADDING NEW USER AND BLOCKING ACCESS TO DEFAULT ONE]" 
