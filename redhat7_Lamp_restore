@@ -62,7 +62,7 @@ cd /opt && curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar
 php wp-cli.phar --info
 chmod +x wp-cli.phar
 mv wp-cli.phar /usr/local/bin/wp
-
+hostnamectl set-hostname marbew.com --static
 systemctl enable httpd mariadb arpwatch && \
 systemctl restart firewalld httpd mariadb arpwatch && \
 systemctl status firewalld httpd mariadb arpwatch && \
