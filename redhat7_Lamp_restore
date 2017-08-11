@@ -52,7 +52,7 @@ else
        /bin/dd if=/dev/zero of=/myswap count=2048 bs=1MiB && chmod 600 /myswap && /sbin/mkswap /myswap && /sbin/swapon /myswap 
        echo "/myswap   swap    swap    sw  0   0" >> /etc/fstab && /bin/mount -a     
 fi
-yum install -y vim firewalld httpd mariadb-server mariadb php php-mysql mod_ssl mod_security wget curl sysstat mailx unzip && \
+yum install -y vim firewalld httpd mariadb-server mariadb php php-mysql mod_ssl mod_security wget curl sysstat mailx unzip rkhunter && \
 cd /tmp && \
 wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
 rpm -Uvh epel-release-latest-7*.rpm && \
