@@ -70,24 +70,24 @@ firewall-cmd --permanent --add-service=http && \
 firewall-cmd --permanent --add-service=https && \
 firewall-cmd --reload && \
 echo -e "\n[COPYING PRIVATE KEY: STARTED]"
-cat <<EOF >> ~/.ssh/italia
+cat <<EOF >> ~/.ssh/key
 -----BEGIN RSA PRIVATE KEY-----
 
 -----END RSA PRIVATE KEY-----
 EOF
-chmod 400 ~/.ssh/italia
+chmod 400 ~/.ssh/key
 echo -e "\n[COPYING PRIVATE KEY: FINISHED]"
 
 echo -e "\n[COPYING BACKUP: STARTED]"
-ssh -i ~/.ssh/italia -o StrictHostKeyChecking=no $server -p $servernump /opt/latest_backup 2>/dev/null
-scp -r -i ~/.ssh/italia -P $servernump $server:$uploadable /root/ && \
+ssh -i ~/.ssh/key -o StrictHostKeyChecking=no $server -p $servernump /opt/latest_backup 2>/dev/null
+scp -r -i ~/.ssh/key -P $servernump $server:$uploadable /root/ && \
 cd /root/ && \
 ls -la /root && \
 tar -xzf /root/uploadable.tar.gz
 echo -e "\n[COPYING BACKUP: FINISHED]"
 ls -la /root/
 echo -e "\n[DELETING TEMP FILE FROM REMOTE BACKUP SERVER: STARTED] "
-ssh -i ~/.ssh/italia $server -p $servernump rm -rf $uploadable
+ssh -i ~/.ssh/key $server -p $servernump rm -rf $uploadable
 echo -e "\n[DELETING TEMP FILE FROM REMOTE BACKUP SERVER: FINISHED] "
 echo -e "\n[INSTALLING LATEST WORDPRESS VERSION: STARTED]"
 cd /var/www/html && \
