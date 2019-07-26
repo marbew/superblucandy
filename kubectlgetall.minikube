@@ -1,0 +1,1463 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2019-07-19T08:54:34Z"
+    generateName: jenkins-56866c4f48-
+    labels:
+      app: jenkins
+      pod-template-hash: 56866c4f48
+      tier: jenkins
+    name: jenkins-56866c4f48-shcv2
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: jenkins-56866c4f48
+      uid: 1e73833b-8b83-4a18-906a-4b4eaa2bd541
+    resourceVersion: "226790"
+    selfLink: /api/v1/namespaces/default/pods/jenkins-56866c4f48-shcv2
+    uid: 1ec4646b-f3b0-400d-aead-46beb88bb5ed
+  spec:
+    containers:
+    - image: jenkins/jenkins
+      imagePullPolicy: Always
+      name: jenkins
+      ports:
+      - containerPort: 8080
+        name: jenkins
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/jenkins_home
+        name: task-pv-storage
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-7pqt2
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: minikube
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: task-pv-storage
+      persistentVolumeClaim:
+        claimName: task-pv-claim
+    - name: default-token-7pqt2
+      secret:
+        defaultMode: 420
+        secretName: default-token-7pqt2
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2019-07-19T08:54:34Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2019-07-26T06:53:06Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2019-07-26T06:53:06Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2019-07-19T08:54:34Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://4716f7b3a4ff52609f99e68da6e631dab0d6d5dd53ea2360292125f5d66c0d29
+      image: jenkins/jenkins:latest
+      imageID: docker-pullable://jenkins/jenkins@sha256:3b426cff2ed61e2408ad43724d4d1c55fa819cf63afb932dcc91cc28bd1fb785
+      lastState:
+        terminated:
+          containerID: docker://3a2b246a4a26930dfa0147ef904a5be1bd73400f8c11f67679d84d753580ca9c
+          exitCode: 255
+          finishedAt: "2019-07-26T06:52:07Z"
+          reason: Error
+          startedAt: "2019-07-24T18:08:15Z"
+      name: jenkins
+      ready: true
+      restartCount: 17
+      state:
+        running:
+          startedAt: "2019-07-26T06:53:06Z"
+    hostIP: 10.0.2.15
+    phase: Running
+    podIP: 172.17.0.12
+    qosClass: BestEffort
+    startTime: "2019-07-19T08:54:34Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2019-07-18T13:23:46Z"
+    generateName: prometheus-deployment-6f4bbd4f8d-
+    labels:
+      app: prometheus
+      pod-template-hash: 6f4bbd4f8d
+    name: prometheus-deployment-6f4bbd4f8d-sf4zz
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: prometheus-deployment-6f4bbd4f8d
+      uid: 5e881a86-c8a0-400a-8880-f94d35a858ea
+    resourceVersion: "226771"
+    selfLink: /api/v1/namespaces/default/pods/prometheus-deployment-6f4bbd4f8d-sf4zz
+    uid: 8b0bd6ed-6135-4a35-9bcd-d988c820a234
+  spec:
+    containers:
+    - image: prom/prometheus
+      imagePullPolicy: Always
+      name: prometheus-cont
+      ports:
+      - containerPort: 9090
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /etc/prometheus/prometheus.yml
+        name: config-volume
+        subPath: prometheus.yml
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: prometheus-token-hq27s
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: minikube
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: prometheus
+    serviceAccountName: prometheus
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - configMap:
+        defaultMode: 420
+        name: prometheus-config
+      name: config-volume
+    - name: prometheus-token-hq27s
+      secret:
+        defaultMode: 420
+        secretName: prometheus-token-hq27s
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2019-07-18T13:23:46Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2019-07-26T06:53:03Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2019-07-26T06:53:03Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2019-07-18T13:23:46Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://4fd6ecf6b81f30b44c67c059b82ff27949ed7a3022b46776ffb41963e94724c5
+      image: prom/prometheus:latest
+      imageID: docker-pullable://prom/prometheus@sha256:8f34c18cf2ccaf21e361afd18e92da2602d0fa23a8917f759f906219242d8572
+      lastState:
+        terminated:
+          containerID: docker://560eb9d3f606bf9567855d0078ab24f9cd588c5d8648122400753952becbd32a
+          exitCode: 255
+          finishedAt: "2019-07-26T06:52:07Z"
+          reason: Error
+          startedAt: "2019-07-24T18:08:11Z"
+      name: prometheus-cont
+      ready: true
+      restartCount: 11
+      state:
+        running:
+          startedAt: "2019-07-26T06:53:02Z"
+    hostIP: 10.0.2.15
+    phase: Running
+    podIP: 172.17.0.8
+    qosClass: BestEffort
+    startTime: "2019-07-18T13:23:46Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2019-07-18T13:23:46Z"
+    generateName: prometheus-deployment-6f4bbd4f8d-
+    labels:
+      app: prometheus
+      pod-template-hash: 6f4bbd4f8d
+    name: prometheus-deployment-6f4bbd4f8d-xjbxr
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: prometheus-deployment-6f4bbd4f8d
+      uid: 5e881a86-c8a0-400a-8880-f94d35a858ea
+    resourceVersion: "226777"
+    selfLink: /api/v1/namespaces/default/pods/prometheus-deployment-6f4bbd4f8d-xjbxr
+    uid: 7f081556-59b9-4679-b67b-80e1f95be424
+  spec:
+    containers:
+    - image: prom/prometheus
+      imagePullPolicy: Always
+      name: prometheus-cont
+      ports:
+      - containerPort: 9090
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /etc/prometheus/prometheus.yml
+        name: config-volume
+        subPath: prometheus.yml
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: prometheus-token-hq27s
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: minikube
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: prometheus
+    serviceAccountName: prometheus
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - configMap:
+        defaultMode: 420
+        name: prometheus-config
+      name: config-volume
+    - name: prometheus-token-hq27s
+      secret:
+        defaultMode: 420
+        secretName: prometheus-token-hq27s
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2019-07-18T13:23:46Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2019-07-26T06:53:04Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2019-07-26T06:53:04Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2019-07-18T13:23:46Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://e168b45112f72a6d1aef2f1c9d1f92ee2468100c2b5e8b0ce0630470c0773463
+      image: prom/prometheus:latest
+      imageID: docker-pullable://prom/prometheus@sha256:8f34c18cf2ccaf21e361afd18e92da2602d0fa23a8917f759f906219242d8572
+      lastState:
+        terminated:
+          containerID: docker://8cae522eb0e5a71d4927684c05800333ab388d5cbe53d06af3efcec9081b3531
+          exitCode: 255
+          finishedAt: "2019-07-26T06:52:07Z"
+          reason: Error
+          startedAt: "2019-07-24T18:08:14Z"
+      name: prometheus-cont
+      ready: true
+      restartCount: 11
+      state:
+        running:
+          startedAt: "2019-07-26T06:53:03Z"
+    hostIP: 10.0.2.15
+    phase: Running
+    podIP: 172.17.0.11
+    qosClass: BestEffort
+    startTime: "2019-07-18T13:23:46Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2019-07-18T12:59:31Z"
+    generateName: wordpress-7976477988-
+    labels:
+      app: wordpress
+      pod-template-hash: "7976477988"
+      tier: frontend
+    name: wordpress-7976477988-g4w6g
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: wordpress-7976477988
+      uid: d5a5fd91-6dd0-44c2-84fa-d9158dc1ae39
+    resourceVersion: "226741"
+    selfLink: /api/v1/namespaces/default/pods/wordpress-7976477988-g4w6g
+    uid: 653cb52e-2b6f-483a-a925-4acef16bcbe2
+  spec:
+    containers:
+    - env:
+      - name: WORDPRESS_DB_HOST
+        value: wordpress-mysql
+      - name: WORDPRESS_DB_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: password
+            name: mysql-pass-hmfd4k9bhm
+      image: wordpress:4.8-apache
+      imagePullPolicy: IfNotPresent
+      name: wordpress
+      ports:
+      - containerPort: 80
+        name: wordpress
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/www/html
+        name: wordpress-persistent-storage
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-7pqt2
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: minikube
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: wordpress-persistent-storage
+      persistentVolumeClaim:
+        claimName: wp-pv-claim
+    - name: default-token-7pqt2
+      secret:
+        defaultMode: 420
+        secretName: default-token-7pqt2
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2019-07-18T12:59:33Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2019-07-26T06:53:00Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2019-07-26T06:53:00Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2019-07-18T12:59:33Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://36429b6c66edb56f4b2c9cdf941b7fad3b1f1805842110f34a7774c202507964
+      image: wordpress:4.8-apache
+      imageID: docker-pullable://wordpress@sha256:6216f64ab88fc51d311e38c7f69ca3f9aaba621492b4f1fa93ddf63093768845
+      lastState:
+        terminated:
+          containerID: docker://e97aa47879bbb47c3ebf2dc4e801844307fe2802752a6c08c4ce4b63e2bf9bd8
+          exitCode: 255
+          finishedAt: "2019-07-26T06:52:07Z"
+          reason: Error
+          startedAt: "2019-07-24T18:08:09Z"
+      name: wordpress
+      ready: true
+      restartCount: 14
+      state:
+        running:
+          startedAt: "2019-07-26T06:52:59Z"
+    hostIP: 10.0.2.15
+    phase: Running
+    podIP: 172.17.0.6
+    qosClass: BestEffort
+    startTime: "2019-07-18T12:59:33Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2019-07-18T12:59:31Z"
+    generateName: wordpress-mysql-76c8b89f5b-
+    labels:
+      app: wordpress
+      pod-template-hash: 76c8b89f5b
+      tier: mysql
+    name: wordpress-mysql-76c8b89f5b-nxtj4
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: wordpress-mysql-76c8b89f5b
+      uid: cb9d2e87-19f6-4457-8a20-1ba7479e959b
+    resourceVersion: "226732"
+    selfLink: /api/v1/namespaces/default/pods/wordpress-mysql-76c8b89f5b-nxtj4
+    uid: 89f8575c-850e-43be-b897-f01e309cd030
+  spec:
+    containers:
+    - env:
+      - name: MYSQL_ROOT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: password
+            name: mysql-pass-hmfd4k9bhm
+      image: mysql:5.6
+      imagePullPolicy: IfNotPresent
+      name: mysql
+      ports:
+      - containerPort: 3306
+        name: mysql
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/lib/mysql
+        name: mysql-persistent-storage
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-7pqt2
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: minikube
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: mysql-persistent-storage
+      persistentVolumeClaim:
+        claimName: mysql-pv-claim
+    - name: default-token-7pqt2
+      secret:
+        defaultMode: 420
+        secretName: default-token-7pqt2
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2019-07-18T12:59:33Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2019-07-26T06:53:02Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2019-07-26T06:53:02Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2019-07-18T12:59:33Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://633ab547418fbef1e68a45702bd99af0a7add883fb53a55dd946dd516ab88613
+      image: mysql:5.6
+      imageID: docker-pullable://mysql@sha256:02b3ddb41d6e5d48d24aa8e59e1cd5870ddaca8ba7cdedf6602f7e6266240d64
+      lastState:
+        terminated:
+          containerID: docker://100d2e485c33431be513561e98f21cdc3dcea5367210595c4cdae391e7bc3258
+          exitCode: 255
+          finishedAt: "2019-07-26T06:52:07Z"
+          reason: Error
+          startedAt: "2019-07-24T18:08:09Z"
+      name: mysql
+      ready: true
+      restartCount: 26
+      state:
+        running:
+          startedAt: "2019-07-26T06:53:01Z"
+    hostIP: 10.0.2.15
+    phase: Running
+    podIP: 172.17.0.7
+    qosClass: BestEffort
+    startTime: "2019-07-18T12:59:33Z"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: "2019-07-19T08:54:34Z"
+    labels:
+      app: jenkins
+    name: jenkins
+    namespace: default
+    resourceVersion: "58653"
+    selfLink: /api/v1/namespaces/default/services/jenkins
+    uid: 85e98506-f293-4260-a194-1fafc2792953
+  spec:
+    clusterIP: 10.101.20.65
+    externalTrafficPolicy: Cluster
+    ports:
+    - nodePort: 30050
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: jenkins
+      tier: jenkins
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: "2019-07-18T12:09:42Z"
+    labels:
+      component: apiserver
+      provider: kubernetes
+    name: kubernetes
+    namespace: default
+    resourceVersion: "151"
+    selfLink: /api/v1/namespaces/default/services/kubernetes
+    uid: 4f344fe7-ee82-4f37-8e5a-5202ad5c4dbc
+  spec:
+    clusterIP: 10.96.0.1
+    ports:
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 8443
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: "2019-07-18T13:25:34Z"
+    name: prometheus-service
+    namespace: default
+    resourceVersion: "6996"
+    selfLink: /api/v1/namespaces/default/services/prometheus-service
+    uid: 9ad29b66-d784-4fac-abc7-f5acc815efd0
+  spec:
+    clusterIP: 10.98.94.229
+    externalTrafficPolicy: Cluster
+    ports:
+    - name: promui
+      nodePort: 30900
+      port: 9090
+      protocol: TCP
+      targetPort: 9090
+    selector:
+      app: prometheus
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"wordpress"},"name":"wordpress","namespace":"default"},"spec":{"ports":[{"port":80}],"selector":{"app":"wordpress","tier":"frontend"},"type":"LoadBalancer"}}
+    creationTimestamp: "2019-07-18T12:14:00Z"
+    labels:
+      app: wordpress
+    name: wordpress
+    namespace: default
+    resourceVersion: "1008"
+    selfLink: /api/v1/namespaces/default/services/wordpress
+    uid: 074ad6e0-6881-414f-93c4-474a5d8341a7
+  spec:
+    clusterIP: 10.100.216.222
+    externalTrafficPolicy: Cluster
+    ports:
+    - nodePort: 30428
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      app: wordpress
+      tier: frontend
+    sessionAffinity: None
+    type: LoadBalancer
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"wordpress"},"name":"wordpress-mysql","namespace":"default"},"spec":{"clusterIP":"None","ports":[{"port":3306}],"selector":{"app":"wordpress","tier":"mysql"}}}
+    creationTimestamp: "2019-07-18T12:14:00Z"
+    labels:
+      app: wordpress
+    name: wordpress-mysql
+    namespace: default
+    resourceVersion: "1006"
+    selfLink: /api/v1/namespaces/default/services/wordpress-mysql
+    uid: 2de40578-9e76-4cb8-a227-df9d4e725e47
+  spec:
+    clusterIP: None
+    ports:
+    - port: 3306
+      protocol: TCP
+      targetPort: 3306
+    selector:
+      app: wordpress
+      tier: mysql
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2019-07-19T08:54:34Z"
+    generation: 1
+    labels:
+      app: jenkins
+    name: jenkins
+    namespace: default
+    resourceVersion: "181644"
+    selfLink: /apis/apps/v1/namespaces/default/deployments/jenkins
+    uid: 7a57bc42-3917-401c-a8f1-04d0d77385eb
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: jenkins
+        tier: jenkins
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: jenkins
+          tier: jenkins
+      spec:
+        containers:
+        - image: jenkins/jenkins
+          imagePullPolicy: Always
+          name: jenkins
+          ports:
+          - containerPort: 8080
+            name: jenkins
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/jenkins_home
+            name: task-pv-storage
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: task-pv-storage
+          persistentVolumeClaim:
+            claimName: task-pv-claim
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2019-07-19T08:54:34Z"
+      lastUpdateTime: "2019-07-19T08:54:37Z"
+      message: ReplicaSet "jenkins-56866c4f48" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2019-07-23T05:55:30Z"
+      lastUpdateTime: "2019-07-23T05:55:30Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2019-07-18T13:23:46Z"
+    generation: 1
+    name: prometheus-deployment
+    namespace: default
+    resourceVersion: "63090"
+    selfLink: /apis/apps/v1/namespaces/default/deployments/prometheus-deployment
+    uid: 7e7feeee-a175-47af-936b-835cce93bb24
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 2
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: prometheus
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: prometheus
+      spec:
+        containers:
+        - image: prom/prometheus
+          imagePullPolicy: Always
+          name: prometheus-cont
+          ports:
+          - containerPort: 9090
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/prometheus/prometheus.yml
+            name: config-volume
+            subPath: prometheus.yml
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: prometheus
+        serviceAccountName: prometheus
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: prometheus-config
+          name: config-volume
+  status:
+    availableReplicas: 2
+    conditions:
+    - lastTransitionTime: "2019-07-18T13:23:46Z"
+      lastUpdateTime: "2019-07-18T13:24:08Z"
+      message: ReplicaSet "prometheus-deployment-6f4bbd4f8d" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2019-07-19T09:48:00Z"
+      lastUpdateTime: "2019-07-19T09:48:00Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 1
+    readyReplicas: 2
+    replicas: 2
+    updatedReplicas: 2
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"wordpress"},"name":"wordpress","namespace":"default"},"spec":{"selector":{"matchLabels":{"app":"wordpress","tier":"frontend"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"labels":{"app":"wordpress","tier":"frontend"}},"spec":{"containers":[{"env":[{"name":"WORDPRESS_DB_HOST","value":"wordpress-mysql"},{"name":"WORDPRESS_DB_PASSWORD","valueFrom":{"secretKeyRef":{"key":"password","name":"mysql-pass-hmfd4k9bhm"}}}],"image":"wordpress:4.8-apache","name":"wordpress","ports":[{"containerPort":80,"name":"wordpress"}],"volumeMounts":[{"mountPath":"/var/www/html","name":"wordpress-persistent-storage"}]}],"volumes":[{"name":"wordpress-persistent-storage","persistentVolumeClaim":{"claimName":"wp-pv-claim"}}]}}}}
+    creationTimestamp: "2019-07-18T12:59:31Z"
+    generation: 1
+    labels:
+      app: wordpress
+    name: wordpress
+    namespace: default
+    resourceVersion: "27581"
+    selfLink: /apis/apps/v1/namespaces/default/deployments/wordpress
+    uid: 44394117-e5e2-45ae-aafe-5d87412efbfa
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: wordpress
+        tier: frontend
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: wordpress
+          tier: frontend
+      spec:
+        containers:
+        - env:
+          - name: WORDPRESS_DB_HOST
+            value: wordpress-mysql
+          - name: WORDPRESS_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: mysql-pass-hmfd4k9bhm
+          image: wordpress:4.8-apache
+          imagePullPolicy: IfNotPresent
+          name: wordpress
+          ports:
+          - containerPort: 80
+            name: wordpress
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/www/html
+            name: wordpress-persistent-storage
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: wordpress-persistent-storage
+          persistentVolumeClaim:
+            claimName: wp-pv-claim
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2019-07-18T12:59:31Z"
+      lastUpdateTime: "2019-07-18T12:59:36Z"
+      message: ReplicaSet "wordpress-7976477988" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2019-07-18T18:31:24Z"
+      lastUpdateTime: "2019-07-18T18:31:24Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"wordpress"},"name":"wordpress-mysql","namespace":"default"},"spec":{"selector":{"matchLabels":{"app":"wordpress","tier":"mysql"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"labels":{"app":"wordpress","tier":"mysql"}},"spec":{"containers":[{"env":[{"name":"MYSQL_ROOT_PASSWORD","valueFrom":{"secretKeyRef":{"key":"password","name":"mysql-pass-hmfd4k9bhm"}}}],"image":"mysql:5.6","name":"mysql","ports":[{"containerPort":3306,"name":"mysql"}],"volumeMounts":[{"mountPath":"/var/lib/mysql","name":"mysql-persistent-storage"}]}],"volumes":[{"name":"mysql-persistent-storage","persistentVolumeClaim":{"claimName":"mysql-pv-claim"}}]}}}}
+    creationTimestamp: "2019-07-18T12:59:31Z"
+    generation: 1
+    labels:
+      app: wordpress
+    name: wordpress-mysql
+    namespace: default
+    resourceVersion: "181627"
+    selfLink: /apis/apps/v1/namespaces/default/deployments/wordpress-mysql
+    uid: 5877b62b-73a7-4499-b21e-61d8f3048c68
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: wordpress
+        tier: mysql
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: wordpress
+          tier: mysql
+      spec:
+        containers:
+        - env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: mysql-pass-hmfd4k9bhm
+          image: mysql:5.6
+          imagePullPolicy: IfNotPresent
+          name: mysql
+          ports:
+          - containerPort: 3306
+            name: mysql
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/mysql
+            name: mysql-persistent-storage
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2019-07-18T12:59:31Z"
+      lastUpdateTime: "2019-07-18T12:59:36Z"
+      message: ReplicaSet "wordpress-mysql-76c8b89f5b" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2019-07-23T05:55:20Z"
+      lastUpdateTime: "2019-07-23T05:55:20Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "1"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2019-07-19T08:54:34Z"
+    generation: 1
+    labels:
+      app: jenkins
+      pod-template-hash: 56866c4f48
+      tier: jenkins
+    name: jenkins-56866c4f48
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: jenkins
+      uid: 7a57bc42-3917-401c-a8f1-04d0d77385eb
+    resourceVersion: "181643"
+    selfLink: /apis/apps/v1/namespaces/default/replicasets/jenkins-56866c4f48
+    uid: 1e73833b-8b83-4a18-906a-4b4eaa2bd541
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: jenkins
+        pod-template-hash: 56866c4f48
+        tier: jenkins
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: jenkins
+          pod-template-hash: 56866c4f48
+          tier: jenkins
+      spec:
+        containers:
+        - image: jenkins/jenkins
+          imagePullPolicy: Always
+          name: jenkins
+          ports:
+          - containerPort: 8080
+            name: jenkins
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/jenkins_home
+            name: task-pv-storage
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: task-pv-storage
+          persistentVolumeClaim:
+            claimName: task-pv-claim
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2019-07-18T13:23:46Z"
+    generation: 1
+    labels:
+      app: prometheus
+      pod-template-hash: 6f4bbd4f8d
+    name: prometheus-deployment-6f4bbd4f8d
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: prometheus-deployment
+      uid: 7e7feeee-a175-47af-936b-835cce93bb24
+    resourceVersion: "63088"
+    selfLink: /apis/apps/v1/namespaces/default/replicasets/prometheus-deployment-6f4bbd4f8d
+    uid: 5e881a86-c8a0-400a-8880-f94d35a858ea
+  spec:
+    replicas: 2
+    selector:
+      matchLabels:
+        app: prometheus
+        pod-template-hash: 6f4bbd4f8d
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: prometheus
+          pod-template-hash: 6f4bbd4f8d
+      spec:
+        containers:
+        - image: prom/prometheus
+          imagePullPolicy: Always
+          name: prometheus-cont
+          ports:
+          - containerPort: 9090
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/prometheus/prometheus.yml
+            name: config-volume
+            subPath: prometheus.yml
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: prometheus
+        serviceAccountName: prometheus
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: prometheus-config
+          name: config-volume
+  status:
+    availableReplicas: 2
+    fullyLabeledReplicas: 2
+    observedGeneration: 1
+    readyReplicas: 2
+    replicas: 2
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "1"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2019-07-18T12:59:31Z"
+    generation: 1
+    labels:
+      app: wordpress
+      pod-template-hash: "7976477988"
+      tier: frontend
+    name: wordpress-7976477988
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: wordpress
+      uid: 44394117-e5e2-45ae-aafe-5d87412efbfa
+    resourceVersion: "27578"
+    selfLink: /apis/apps/v1/namespaces/default/replicasets/wordpress-7976477988
+    uid: d5a5fd91-6dd0-44c2-84fa-d9158dc1ae39
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: wordpress
+        pod-template-hash: "7976477988"
+        tier: frontend
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: wordpress
+          pod-template-hash: "7976477988"
+          tier: frontend
+      spec:
+        containers:
+        - env:
+          - name: WORDPRESS_DB_HOST
+            value: wordpress-mysql
+          - name: WORDPRESS_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: mysql-pass-hmfd4k9bhm
+          image: wordpress:4.8-apache
+          imagePullPolicy: IfNotPresent
+          name: wordpress
+          ports:
+          - containerPort: 80
+            name: wordpress
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/www/html
+            name: wordpress-persistent-storage
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: wordpress-persistent-storage
+          persistentVolumeClaim:
+            claimName: wp-pv-claim
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "1"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2019-07-18T12:59:31Z"
+    generation: 1
+    labels:
+      app: wordpress
+      pod-template-hash: 76c8b89f5b
+      tier: mysql
+    name: wordpress-mysql-76c8b89f5b
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: wordpress-mysql
+      uid: 5877b62b-73a7-4499-b21e-61d8f3048c68
+    resourceVersion: "181625"
+    selfLink: /apis/apps/v1/namespaces/default/replicasets/wordpress-mysql-76c8b89f5b
+    uid: cb9d2e87-19f6-4457-8a20-1ba7479e959b
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: wordpress
+        pod-template-hash: 76c8b89f5b
+        tier: mysql
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: wordpress
+          pod-template-hash: 76c8b89f5b
+          tier: mysql
+      spec:
+        containers:
+        - env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: mysql-pass-hmfd4k9bhm
+          image: mysql:5.6
+          imagePullPolicy: IfNotPresent
+          name: mysql
+          ports:
+          - containerPort: 3306
+            name: mysql
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/mysql
+            name: mysql-persistent-storage
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    creationTimestamp: "2019-07-20T00:01:08Z"
+    labels:
+      controller-uid: e1e09975-fdee-4cdf-a784-665f10e9b1ed
+      job-name: curator-1563580860
+    name: curator-1563580860
+    namespace: default
+    ownerReferences:
+    - apiVersion: batch/v1beta1
+      blockOwnerDeletion: true
+      controller: true
+      kind: CronJob
+      name: curator
+      uid: bfeadb48-fc15-4b18-8f83-4d9bf136664a
+    resourceVersion: "128611"
+    selfLink: /apis/batch/v1/namespaces/default/jobs/curator-1563580860
+    uid: e1e09975-fdee-4cdf-a784-665f10e9b1ed
+  spec:
+    backoffLimit: 6
+    completions: 1
+    parallelism: 1
+    selector:
+      matchLabels:
+        controller-uid: e1e09975-fdee-4cdf-a784-665f10e9b1ed
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          controller-uid: e1e09975-fdee-4cdf-a784-665f10e9b1ed
+          job-name: curator-1563580860
+      spec:
+        containers:
+        - args:
+          - --config
+          - /etc/config/config.yml
+          - /etc/config/action_file.yml
+          image: quay.io/pires/docker-elasticsearch-curator:5.5.1
+          imagePullPolicy: IfNotPresent
+          name: curator
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/config
+            name: config-volume
+        dnsPolicy: ClusterFirst
+        restartPolicy: OnFailure
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: curator-config
+          name: config-volume
+  status:
+    completionTime: "2019-07-20T00:01:10Z"
+    conditions:
+    - lastProbeTime: "2019-07-20T00:01:10Z"
+      lastTransitionTime: "2019-07-20T00:01:10Z"
+      status: "True"
+      type: Complete
+    startTime: "2019-07-20T00:01:08Z"
+    succeeded: 1
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    creationTimestamp: "2019-07-26T06:53:16Z"
+    labels:
+      controller-uid: 5373348e-1803-4097-a028-3cc68e34b5cc
+      job-name: curator-1564099260
+    name: curator-1564099260
+    namespace: default
+    ownerReferences:
+    - apiVersion: batch/v1beta1
+      blockOwnerDeletion: true
+      controller: true
+      kind: CronJob
+      name: curator
+      uid: bfeadb48-fc15-4b18-8f83-4d9bf136664a
+    resourceVersion: "227333"
+    selfLink: /apis/batch/v1/namespaces/default/jobs/curator-1564099260
+    uid: 5373348e-1803-4097-a028-3cc68e34b5cc
+  spec:
+    backoffLimit: 6
+    completions: 1
+    parallelism: 1
+    selector:
+      matchLabels:
+        controller-uid: 5373348e-1803-4097-a028-3cc68e34b5cc
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          controller-uid: 5373348e-1803-4097-a028-3cc68e34b5cc
+          job-name: curator-1564099260
+      spec:
+        containers:
+        - args:
+          - --config
+          - /etc/config/config.yml
+          - /etc/config/action_file.yml
+          image: quay.io/pires/docker-elasticsearch-curator:5.5.1
+          imagePullPolicy: IfNotPresent
+          name: curator
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/config
+            name: config-volume
+        dnsPolicy: ClusterFirst
+        restartPolicy: OnFailure
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: curator-config
+          name: config-volume
+  status:
+    conditions:
+    - lastProbeTime: "2019-07-26T06:59:03Z"
+      lastTransitionTime: "2019-07-26T06:59:03Z"
+      message: Job has reached the specified backoff limit
+      reason: BackoffLimitExceeded
+      status: "True"
+      type: Failed
+    failed: 1
+    startTime: "2019-07-26T06:53:17Z"
+- apiVersion: batch/v1beta1
+  kind: CronJob
+  metadata:
+    creationTimestamp: "2019-07-18T16:44:00Z"
+    name: curator
+    namespace: default
+    resourceVersion: "227342"
+    selfLink: /apis/batch/v1beta1/namespaces/default/cronjobs/curator
+    uid: bfeadb48-fc15-4b18-8f83-4d9bf136664a
+  spec:
+    concurrencyPolicy: Allow
+    failedJobsHistoryLimit: 1
+    jobTemplate:
+      metadata:
+        creationTimestamp: null
+      spec:
+        template:
+          metadata:
+            creationTimestamp: null
+          spec:
+            containers:
+            - args:
+              - --config
+              - /etc/config/config.yml
+              - /etc/config/action_file.yml
+              image: quay.io/pires/docker-elasticsearch-curator:5.5.1
+              imagePullPolicy: IfNotPresent
+              name: curator
+              resources: {}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              volumeMounts:
+              - mountPath: /etc/config
+                name: config-volume
+            dnsPolicy: ClusterFirst
+            restartPolicy: OnFailure
+            schedulerName: default-scheduler
+            securityContext: {}
+            terminationGracePeriodSeconds: 30
+            volumes:
+            - configMap:
+                defaultMode: 420
+                name: curator-config
+              name: config-volume
+    schedule: 1 0 * * *
+    successfulJobsHistoryLimit: 3
+    suspend: false
+  status:
+    lastScheduleTime: "2019-07-26T00:01:00Z"
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
