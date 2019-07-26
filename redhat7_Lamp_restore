@@ -1,5 +1,4 @@
 #!/bin/bash
-# RESTORE MARBEW.COM ON NEW INSTANCE
 #
 #      
 #
@@ -21,26 +20,29 @@
 #
 #run the script passing the right parameters for restoring the entire production website
 
-echo -e "[0 OF 6] Enter port number of backup_server[22]: "
+echo -e "[0 OF 7] Enter port number of backup_server[22]: "
 read servernump
 
-echo -e "\n\n[1 OF 6] Enter USER@SERVER  backup_server: "
+echo -e "\n\n[1 OF 7] Enter USER@SERVER  backup_server: "
 read server
 
-echo -e "[2 OF 6] Enter /path_to_backup/uploadable.tar.gz backup_server: "
+echo -e "[2 OF 7] Enter /path_to_backup/uploadable.tar.gz backup_server: "
 read uploadable
 
-echo -e "[3 OF 6] Enter db_password: "
+echo -e "[3 OF 7] Enter db_password: "
 read mysql_rootpwd
 
-echo -e "[4 OF 6] Enter Database name to import: "
+echo -e "[4 OF 7] Enter Database name to import: "
 read mysql_db_name
 
-echo -e "[5 OF 6] Enter Database decrypt password: "
+echo -e "[5 OF 7] Enter Database decrypt password: "
 read opensslPWD
 
-echo -e "[6 OF 6] Enter new Login User: "
+echo -e "[6 OF 7] Enter new Login User: "
 read NEWUSER
+
+echo -e "[7 OF 7] Enter backup Hostname: "
+read BKHOST
 
 
 
@@ -97,26 +99,26 @@ cp -r wordpress/* /var/www/html/ && \
 echo -e "\n[INSTALLING LATEST WORDPRESS VERSION: FINISHED]"
 
 echo -e "\n[COPY BACKUP WORDPRESS INTO NEW SERVER: STARTED]"
-cp /root/ec2-prod.marbew.com/my-backup/html/.htaccess /var/www/html/ 2>/dev/null
-yes | cp /root/ec2-prod.marbew.com/my-backup/html/wp-config.php /var/www/html/wp-config.php 
-yes | cp /root/ec2-prod.marbew.com/my-backup/php.ini /etc/php.ini 
+cp /root/$BKHOST/my-backup/html/.htaccess /var/www/html/ 2>/dev/null
+yes | cp /root/$BKHOST/my-backup/html/wp-config.php /var/www/html/wp-config.php 
+yes | cp /root/$BKHOST/my-backup/php.ini /etc/php.ini 
 
-cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/uploads /var/www/html/wp-content/ 
-cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/plugins /var/www/html/wp-content/
-cp -r /root/ec2-prod.marbew.com/my-backup/html/wordfence-waf.php /var/www/html/ 
-cp -r /root/ec2-prod.marbew.com/my-backup/html/wp-content/themes/twentyfourteen /var/www/html/wp-content/themes/ 
-yes | cp /root/ec2-prod.marbew.com/my-backup/root/.bashrc /root/ 2>/dev/null
+cp -r /root/$BKHOST/my-backup/html/wp-content/uploads /var/www/html/wp-content/ 
+cp -r /root/$BKHOST/my-backup/html/wp-content/plugins /var/www/html/wp-content/
+cp -r /root/$BKHOST/my-backup/html/wordfence-waf.php /var/www/html/ 
+cp -r /root/$BKHOST/my-backup/html/wp-content/themes/twentyfourteen /var/www/html/wp-content/themes/ 
+yes | cp /root/$BKHOST/my-backup/root/.bashrc /root/ 2>/dev/null
 
-cp /root/ec2-prod.marbew.com/my-backup/pki/tls/certs/2016-marbew.com.crt /etc/pki/tls/certs/ 
-cp /root/ec2-prod.marbew.com/my-backup/pki/tls/certs/ca-marbew.com.crt /etc/pki/tls/certs/ 
-cp /root/ec2-prod.marbew.com/my-backup/pki/tls/private/2016-marbew.com.key /etc/pki/tls/private/ 
+cp /root/$BKHOST/my-backup/pki/tls/certs/2016-marbew.com.crt /etc/pki/tls/certs/ 
+cp /root/$BKHOST/my-backup/pki/tls/certs/ca-marbew.com.crt /etc/pki/tls/certs/ 
+cp /root/$BKHOST/my-backup/pki/tls/private/2016-marbew.com.key /etc/pki/tls/private/ 
 cp /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.ori 
 
-yes | cp /root/ec2-prod.marbew.com/my-backup/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ 
-yes | cp /root/ec2-prod.marbew.com/my-backup/httpd/conf.d/mod_security.conf /etc/httpd/conf.d/
+yes | cp /root/$BKHOST/my-backup/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ 
+yes | cp /root/$BKHOST/my-backup/httpd/conf.d/mod_security.conf /etc/httpd/conf.d/
 
-yes | cp -r /root/ec2-prod.marbew.com/my-backup/root/* /root/
-yes | cp -r /root/ec2-prod.marbew.com/my-backup/cron* /etc/
+yes | cp -r /root/$BKHOST/my-backup/root/* /root/
+yes | cp -r /root/$BKHOST/my-backup/cron* /etc/
 echo -e "\n[COPY BACKUP WORDPRESS INTO NEW SERVER: FINISHED]"
 
 cd /
@@ -125,10 +127,10 @@ rm -rf /var/www/html/latest.zip
 rm -rf /var/www/html/wordpress
 
 echo "[DECOMPRESS DATABASE]"
-openssl enc -d -aes-256-cbc -in /root/ec2-prod.marbew.com/my-backup/mysql/$mysql_db_name -out /root/ec2-prod.marbew.com/my-backup/mysql/db.gz -k $opensslPWD
-gzip -d < /root/ec2-prod.marbew.com/my-backup/mysql/db.gz > /root/ec2-prod.marbew.com/my-backup/mysql/db-sql
+openssl enc -d -aes-256-cbc -in /root/$BKHOST/my-backup/mysql/$mysql_db_name -out /root/$BKHOST/my-backup/mysql/db.gz -k $opensslPWD
+gzip -d < /root/$BKHOST/my-backup/mysql/db.gz > /root/$BKHOST/my-backup/mysql/db-sql
 echo -e "\n[IMPORT DATABASE: STARTED]"
-mysql < /root/ec2-prod.marbew.com/my-backup/mysql/db-sql
+mysql < /root/$BKHOST/my-backup/mysql/db-sql
 find /var/www/html/ -type f -exec chmod 664 {} \;
 find /var/www/html/ -type d -exec chmod 775 {} \;
 chown -R apache:apache /var/www/html/.*
@@ -151,7 +153,7 @@ chown -R $NEWUSER:$NEWUSER .*
 echo "$NEWUSER           ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
 usermod -s /sbin/nologin ec2-user
 echo -e "\n[CLEANING INSTALLATION: STARTED]"
-cd /root && rm -rf uploadable.tar.gz superbluecandy-master master.zip ec2-prod.marbew.com anaconda-ks.cfg
+cd /root && rm -rf uploadable.tar.gz superbluecandy-master master.zip $BKHOST anaconda-ks.cfg
 ls -la /root/
 echo -e "\n[CLEANING INSTALLATION: DONE]"
 
