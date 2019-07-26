@@ -15,6 +15,5 @@ banaction = iptables-multiport
 enabled = true
 EOF
 systemctl restart fail2ban
-cat /etc/fail2ban/jail.local
 fail2ban-client status sshd
 echo "fail2ban-client status sshd" >> /root/.bashrc
