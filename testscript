@@ -3,3 +3,4 @@ echo "this is the test!"
 NUMBER=$(($NUMBERONE + $NUMBERTWO))
 echo "$NUMBER"
 echo "change"
+echo "1change"
