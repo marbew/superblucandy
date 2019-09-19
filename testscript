@@ -1,0 +1,5 @@
+#/bin/bash
+echo "this is the test!"
+NUMBER=$(($NUMBERONE + $NUMBERTWO))
+echo "$NUMBER"
+echo "This is complete"
